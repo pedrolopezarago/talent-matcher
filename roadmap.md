@@ -10,3 +10,5 @@
 - [x] Run routing and state tests; inspect final build and browser errors.
 - [x] Document the external matching-service and profile-data handoff.
 - [x] Use the newly uploaded wordmark as the page title and verify it renders.
+- [ ] Add dynamic team weakness and risk analysis with actionable recommendations.
+- [ ] Test the risk rules and verify the team view on desktop and phone.
