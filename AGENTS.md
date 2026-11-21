@@ -28,3 +28,5 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- TalentIn's interface lives in `src/talent/`, with its shared API contract in `src/shared/contract.ts`; seeded mocks are the default and `VITE_API_URL` switches to the external matching service.
