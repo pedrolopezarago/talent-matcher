@@ -40,3 +40,7 @@ Running log of what the backend team did and why. Newest at the bottom.
 ### Task 7 — judging + grounding
 - Judging: batches of 10 compact-JSON profiles, per requirement `met|partial|missing` + evidence **paths only**, plus strengths (with paths), gaps, risks in the requested language. Prompt rewards skills evidenced in projects/experience and flags "low level despite years" and "only in an old project".
 - Grounding (code): each path resolved against the stored profile and its value rendered by code. Unresolvable path → dropped and counted; requirement left without evidence → `missing`; strength with no valid path → removed; unknown req_id → dropped; every requirement appears exactly once. Totals feed `grounding {claims, dropped}`.
+
+### Task 8 — fit score + hidden talent
+- `fit = Σ credit·w / Σ w` (met 1, partial 0.5, missing 0; must 3×weight, nice 1×weight), skill requirements × depth `0.6 + 0.4·mean(level/5, min(years,5)/5)` using the cited skill (else name/synonym match). Any must missing → capped at 69.
+- `different_area`: area ≠ modal area for that role title in the data, and must coverage ≥ 0.7. `vocab_bridges`: met requirement whose evidence doesn't contain the literal asked term.
