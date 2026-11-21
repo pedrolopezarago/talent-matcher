@@ -27,3 +27,8 @@ Running log of what the backend team did and why. Newest at the bottom.
 - One structured-output call with the data vocabulary (87 roles, 12 areas, sectors, 614 skills) in the cached system prompt; the LLM maps requirements onto real data words and adds vocabulary synonyms (how keyword mode bridges different wording).
 - Code clamps: review_depth 100–SCREEN_MAX_PER_ROLE, criticality 1–5, weight 1–3; ids `r{n}` / `r{n}-q{m}`; no date → `immediate=true`.
 - Errors: empty text or no roles → 422; LLM failure → 502.
+
+### Task 5 — hard filters + keyword retrieval
+- Availability rule from the start date (immediate/<1 month → En banca; 1–3 months → + Roll-off with timing risk; ≥3 → same pool, no risk). Unparseable date → immediate. Must-have languages filtered by CEFR rank in SQL (no level → B2). Location and nice requirements are never filters.
+- Keyword retrieval scored in SQL: each requirement counts once if its value or any synonym is in `search_text` (must 3×w, nice w), + 0.1 × skill level, sector via `sector_principal` / project `cliente_sector`, +2 if the role title matches. Normalised to 0–1 (used as `similarity`).
+- Measured: Cloud Architect (AWS, Terraform, banking nice, English B2 must), start in 2 months → 26,555 after filters, top 1,000 retrieved in 0.64 s.
