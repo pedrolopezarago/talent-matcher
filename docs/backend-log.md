@@ -32,3 +32,7 @@ Running log of what the backend team did and why. Newest at the bottom.
 - Availability rule from the start date (immediate/<1 month → En banca; 1–3 months → + Roll-off with timing risk; ≥3 → same pool, no risk). Unparseable date → immediate. Must-have languages filtered by CEFR rank in SQL (no level → B2). Location and nice requirements are never filters.
 - Keyword retrieval scored in SQL: each requirement counts once if its value or any synonym is in `search_text` (must 3×w, nice w), + 0.1 × skill level, sector via `sector_principal` / project `cliente_sector`, +2 if the role title matches. Normalised to 0–1 (used as `similarity`).
 - Measured: Cloud Architect (AWS, Terraform, banking nice, English B2 must), start in 2 months → 26,555 after filters, top 1,000 retrieved in 0.64 s.
+
+### Task 6 — profile views + screening
+- `profile_view.py`: compact card (~150 tokens) for screening, judge view (stored keys so paths resolve), `resolve_path` (never raises, only whitelisted roots — `email` can't be cited) and `render` (display values in the formats of `docs/data-schema.md`). Email never goes to the LLM.
+- Screening: batches of 50 cards, parallel (semaphore `MAX_LLM_CONCURRENCY`), score 0–10 + short reason; unknown ids ignored; failed batches counted and skipped; stops launching batches once the per-request cost cap is hit. Ties keep retrieval order.
