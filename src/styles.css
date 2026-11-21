@@ -30,7 +30,12 @@
  */
 
 @theme inline {
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "League Spartan", system-ui, sans-serif;
+  --color-support: var(--support);
+  --color-support-dark: var(--support-dark);
+  --color-support-soft: var(--support-soft);
+  --color-overlay: var(--overlay);
   --color-brand: var(--brand);
   --color-brand-dark: var(--brand-dark);
   --color-brand-soft: var(--brand-soft);
@@ -97,8 +102,12 @@
 }
 
 :root {
+  --support: oklch(0.65377 0.109795 206.03);
+  --support-dark: oklch(0.529679 0.088878 207.052);
+  --support-soft: oklch(0.65377 0.109795 206.03 / 0.1);
+  --overlay: oklch(0.22 0.003 286 / 0.32);
   --radius: 0.625rem;
-  --brand: oklch(0.69 0.21 44);
+  --brand: oklch(0.69583 0.204259 44.479);
   --brand-dark: oklch(0.62 0.2 42);
   --brand-soft: oklch(0 0 0 / 0.04);
   --ink: oklch(0.22 0.003 286);
@@ -107,9 +116,9 @@
   --canvas: oklch(0.982 0.002 248);
   --ok: oklch(0.62 0.13 150);
   --ok-soft: oklch(0.95 0.04 150);
-  --warn: oklch(0.55 0.17 42);
+  --warn: oklch(0.53 0.008 286);
   --warn-soft: oklch(0.86 0.09 50);
-  --bad: oklch(0.52 0.15 50);
+  --bad: oklch(0.52 0.15 27);
   --bad-soft: oklch(0.94 0.04 60);
   --hidden: oklch(0.45 0.08 85);
   --hidden-soft: oklch(0.91 0.07 95);
@@ -155,6 +164,10 @@
 }
 
 .dark {
+  --support: oklch(0.65377 0.109795 206.03);
+  --support-dark: oklch(0.8 0.08 207);
+  --support-soft: oklch(0.65377 0.109795 206.03 / 0.15);
+  --overlay: oklch(0 0 0 / 0.6);
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
   --card: oklch(0.208 0.042 265.755);
@@ -198,7 +211,9 @@
     background-color: var(--color-canvas);
     color: var(--color-ink);
   }
-  body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+  body { font-family: var(--font-sans); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); line-height: 1.2; }
+  * { letter-spacing: 0; }
 }
 
 @keyframes slide { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
