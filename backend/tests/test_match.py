@@ -53,6 +53,8 @@ async def test_match_shape_and_funnel():
         assert all(c.availability != "Asignado" for c in rr.candidates)
         assert 0 < len(rr.reserve) <= 5 and all(c.availability == "Asignado" for c in rr.reserve)
         assert "Roll-off" in rr.availability_rule
+    java = {c.seniority for c in res.roles[1].candidates}
+    assert java & {"Junior", "Mid"} and java & {"Senior", "Lead", "Principal"}  # both tiers reach judging
     roll = [c for rr in res.roles for c in rr.candidates if c.availability.startswith("Roll-off")]
     assert all(any("oll-off" in r for r in c.risks) for c in roll)
     assert res.grounding.claims > 0

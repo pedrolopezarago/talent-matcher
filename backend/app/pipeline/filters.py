@@ -32,9 +32,16 @@ def availability_rule(brief: Brief, today: date) -> tuple[list[str], bool, str]:
     return [BANCA, ROLL_OFF], False, f"Start in {months:.0f} months → '{BANCA}' + 'Roll-off próximo'"
 
 
-def build_where(role: Role, availability: list[str]) -> tuple[str, dict]:
+EXPERT_LEVELS = ["Senior", "Lead", "Principal"]
+SUPPORT_LEVELS = ["Junior", "Mid"]
+
+
+def build_where(role: Role, availability: list[str], seniorities: list[str] | None = None) -> tuple[str, dict]:
     clauses = ["disponibilidad = ANY(%(avail)s)"]
     params: dict = {"avail": list(availability)}
+    if seniorities:
+        clauses.append("nivel_seniority = ANY(%(seniorities)s)")
+        params["seniorities"] = list(seniorities)
     if role.min_years:
         clauses.append("anios_experiencia >= %(min_years)s")
         params["min_years"] = role.min_years

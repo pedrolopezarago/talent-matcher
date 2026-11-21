@@ -1,4 +1,5 @@
 """FastAPI entrypoint. Shapes follow shared/contract.ts. Hard filters live in SQL, never in the LLM."""
+import asyncio
 import logging
 
 from fastapi import FastAPI, HTTPException
@@ -10,7 +11,7 @@ from backend.app.db import get_profile
 from backend.app.models import Brief, MatchRequest, MatchResult, ParseRequest, TeamRequest, TeamResult
 from backend.app.pipeline.match import match
 from backend.app.pipeline.parse import parse_brief
-from backend.app.pipeline.team import build_team, explain, joint_coverage, swaps
+from backend.app.pipeline.team import build_team, explain, joint_coverage, swaps, training_plans
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("api")
@@ -65,7 +66,8 @@ async def team_route(body: TeamRequest):
     usage.reset()
     optimal, greedy, so, sg = build_team(body.brief, body.match)
     sw = swaps(optimal, greedy)
-    text = await explain(optimal, greedy, so, sg, sw, body.lang)
-    log.info("team: optimal %.1f vs greedy %.1f, $%.4f", so, sg, usage.usd())
+    text, training = await asyncio.gather(explain(optimal, greedy, so, sg, sw, body.lang),
+                                          training_plans(body.brief, body.match, optimal, body.lang))
+    log.info("team: optimal %.1f vs greedy %.1f, %d training plans, $%.4f", so, sg, len(training), usage.usd())
     return TeamResult(optimal=optimal, greedy=greedy, optimal_score=so, greedy_score=sg, swaps=sw, explanation=text,
-                      joint_coverage=joint_coverage(body.brief, body.match, optimal))
+                      joint_coverage=joint_coverage(body.brief, body.match, optimal), training=training)

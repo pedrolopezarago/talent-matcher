@@ -6,7 +6,8 @@ from datetime import date
 from backend.app.config import settings
 from backend.app.db import get_profiles
 from backend.app.models import Brief, Candidate, Funnel, Grounding, MatchResult, Role, RoleResult
-from backend.app.pipeline.filters import ASIGNADO, ROLL_OFF, availability_rule, build_where, count, total_profiles
+from backend.app.pipeline.filters import (ASIGNADO, EXPERT_LEVELS, ROLL_OFF, SUPPORT_LEVELS, availability_rule, build_where,
+                                           count, total_profiles)
 from backend.app.pipeline.ground import ground
 from backend.app.pipeline.judge import judge
 from backend.app.pipeline.retrieve import keyword_retrieve
@@ -64,8 +65,15 @@ async def _match_role(role: Role, allowed: list[str], roll_off_risk: bool, rule:
     reserve_hits = await asyncio.to_thread(keyword_retrieve, role, r_where, r_params, RESERVE_SIZE)
     hits = []
     if after > 0:
+        # Two pools so the team can have one expert and Junior/Mid support: half the depth each.
         depth = max(100, min(role.review_depth, settings.screen_max_per_role))
-        hits = await asyncio.to_thread(keyword_retrieve, role, where, params, depth)
+        e_where, e_params = build_where(role, allowed, EXPERT_LEVELS)
+        s_where, s_params = build_where(role, allowed, SUPPORT_LEVELS)
+        expert_hits, support_hits = await asyncio.gather(
+            asyncio.to_thread(keyword_retrieve, role, e_where, e_params, depth // 2),
+            asyncio.to_thread(keyword_retrieve, role, s_where, s_params, depth // 2),
+        )
+        hits = expert_hits + support_hits
     sims = dict(hits) | dict(reserve_hits)
     profiles = await asyncio.to_thread(get_profiles, [i for i, _ in hits] + [i for i, _ in reserve_hits])
     pool = [profiles[i] for i, _ in hits if i in profiles]
@@ -73,8 +81,14 @@ async def _match_role(role: Role, allowed: list[str], roll_off_risk: bool, rule:
 
     shortlisted: list[dict] = []
     if pool:
-        top_ids, _failed = await screen(role, pool, settings.judge_top_n)
-        shortlisted = [profiles[i] for i in top_ids]
+        ranked, _failed = await screen(role, pool, len(pool))
+        # Judge the best of each tier (half of JUDGE_TOP_N each); a tier with fewer people leaves room to the other.
+        half = settings.judge_top_n // 2
+        exp = [i for i in ranked if profiles[i].get("nivel_seniority") in EXPERT_LEVELS]
+        sup = [i for i in ranked if profiles[i].get("nivel_seniority") not in EXPERT_LEVELS]
+        n_sup = min(len(sup), max(half, settings.judge_top_n - len(exp)))
+        n_exp = min(len(exp), settings.judge_top_n - n_sup)
+        shortlisted = [profiles[i] for i in exp[:n_exp] + sup[:n_sup]]
     (cands, c1, d1), (reserve, c2, d2) = await asyncio.gather(
         _assess(role, shortlisted, sims, lang, roll_off_risk, modal),
         _assess(role, reserve_profiles, sims, lang, False, modal),

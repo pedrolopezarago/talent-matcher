@@ -76,3 +76,9 @@ Running log of what the backend team did and why. Newest at the bottom.
 - Grounding: 1,774 claims checked, 3 dropped. Top candidates cover every requirement with real evidence; risks flag old projects and roll-off timing; one vocabulary bridge (Microservicios ← Spring Boot).
 - Cost cap overshoots (0.75 → 1.14): up to MAX_LLM_CONCURRENCY judge calls are already in flight when the cap is crossed.
 - Optimal team = greedy for this brief (deep pool, no contention).
+
+### Team tiers + training plans
+- One expert (Senior/Lead/Principal) per team, the rest Junior/Mid. Optimal tries the expert in each role; greedy puts it in the most critical role. Off-level fills are flagged `off_tier`.
+- Retrieval now pulls experts and Junior/Mid separately so support profiles reach judging (before: Cloud Architect and PM shortlists had 0 Junior/Mid).
+- Training plans for team members with unmet MUST requirements (Haiku, named certifications/courses/mentoring/project tasks; template fallback).
+- Live (brief 1): match 72 s, $1.13; shortlists now ~half Mid. Team: optimal 95.8 vs greedy 94.6 — optimal puts the Principal Java dev as the expert instead of the Principal Cloud Architect. 0 training plans (everyone met all MUSTs); with two gaps injected for testing, the LLM proposed "AWS Certified Solutions Architect – Associate" and "Oracle Certified Professional, Java SE 17 Developer" ($0.0003).
