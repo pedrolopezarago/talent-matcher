@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Repeat } from "lucide-react";
-import type { Brief, TeamResult } from "@/shared/contract";
+import { ArrowLeft, ArrowRight, Award, BookOpen, Briefcase, GraduationCap, Repeat, UsersRound } from "lucide-react";
+import type { Brief, TeamResult, TrainingRecommendation } from "@/shared/contract";
 import { useT } from "../i18n";
 import { Card, FitRing, fitColor } from "./ui";
 
@@ -63,8 +63,46 @@ export function TeamView({ brief, team, onBack }: { brief: Brief; team: TeamResu
           ))}
         </div>
       </Card>
+
+      {team.training && team.training.length > 0 && (
+        <Card className="p-5 sm:p-6">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h3 className="flex items-center gap-2 font-semibold"><GraduationCap size={18} className="text-brand" />{t("formationTitle")}</h3>
+              <p className="mt-1 text-sm text-muted">{t("formationHint")}</p>
+            </div>
+            <span className="rounded-full bg-brand-soft px-2.5 py-1 text-xs font-medium text-brand-dark">{team.training.length}</span>
+          </div>
+          <div className="mt-5 grid gap-4 lg:grid-cols-2">
+            {team.training.map((plan) => (
+              <section key={`${plan.role_id}-${plan.employee_id}`} className="rounded-2xl border border-line bg-surface p-4">
+                <div className="font-display font-semibold">{plan.name}</div>
+                <div className="mt-0.5 text-xs text-muted">{title(plan.role_id)}</div>
+                <ul className="mt-4 space-y-3">
+                  {plan.recommendations.map((rec) => (
+                    <li key={`${rec.requirement}-${rec.training}`} className="flex items-start gap-3">
+                      <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg bg-brand-soft text-brand-dark"><TrainingIcon kind={rec.kind} /></span>
+                      <div>
+                        <div className="text-xs font-medium text-brand-dark">{rec.requirement}</div>
+                        <p className="mt-0.5 text-sm leading-relaxed">{rec.training}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
+        </Card>
+      )}
     </div>
   );
+}
+
+function TrainingIcon({ kind }: { kind: TrainingRecommendation["kind"] }) {
+  if (kind === "certification") return <Award size={16} />;
+  if (kind === "mentoring") return <UsersRound size={16} />;
+  if (kind === "project") return <Briefcase size={16} />;
+  return <BookOpen size={16} />;
 }
 
 function ScoreBar({ label, value, strong }: { label: string; value: number; strong?: boolean }) {
