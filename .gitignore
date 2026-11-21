@@ -24,3 +24,7 @@ SETUP.md
 loop-logbook.md
 pitch-and-demo-video.md
 video/
+
+# Lovable / TanStack Start build output
+.output/
+.wrangler/
