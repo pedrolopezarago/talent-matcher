@@ -6,7 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from backend.app.config import settings
 from backend.app.llm import LLMError, usage
-from backend.app.models import Brief, ParseRequest
+from backend.app.db import get_profile
+from backend.app.models import Brief, MatchRequest, MatchResult, ParseRequest
+from backend.app.pipeline.match import match
 from backend.app.pipeline.parse import parse_brief
 
 logging.basicConfig(level=logging.INFO)
@@ -36,3 +38,19 @@ async def parse_route(body: ParseRequest):
         raise HTTPException(status_code=502, detail=f"LLM failed: {e}") from e
     log.info("parse: %d roles, $%.4f", len(brief.roles), usage.usd())
     return brief
+
+
+@app.post("/api/match", response_model=MatchResult)
+async def match_route(body: MatchRequest):
+    usage.reset()
+    result = await match(body.brief, body.lang)
+    log.info("match: %d roles, %d LLM calls, $%.4f", len(result.roles), usage.calls, usage.usd())
+    return result
+
+
+@app.get("/api/profile/{employee_id}")
+def profile_route(employee_id: str):
+    p = get_profile(employee_id)
+    if p is None:
+        raise HTTPException(status_code=404, detail="profile not found")
+    return p

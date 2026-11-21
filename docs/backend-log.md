@@ -44,3 +44,10 @@ Running log of what the backend team did and why. Newest at the bottom.
 ### Task 8 — fit score + hidden talent
 - `fit = Σ credit·w / Σ w` (met 1, partial 0.5, missing 0; must 3×weight, nice 1×weight), skill requirements × depth `0.6 + 0.4·mean(level/5, min(years,5)/5)` using the cited skill (else name/synonym match). Any must missing → capped at 69.
 - `different_area`: area ≠ modal area for that role title in the data, and must coverage ≥ 0.7. `vocab_bridges`: met requirement whose evidence doesn't contain the literal asked term.
+
+### Task 9 — `/api/match` end to end, reserve lane, `/api/profile/{id}`
+- Per role, concurrently: availability rule → SQL filters → count → keyword retrieval (`review_depth`, clamped) → screening → top `JUDGE_TOP_N` judged → grounded → scored → hidden flags → sorted by (fit, similarity). Roll-off candidates get a timing risk when the start is 1–3 months away.
+- Reserve lane: same retrieval over `Asignado`, top 5, judged and scored the same way (no screening).
+- Role with zero profiles after filters → returned with an empty list and no LLM calls.
+- Funnel: total 190,000 → after_filters → reviewed (retrieved and screened) → ranked (judged).
+- Live run pending: needs `LLM_API_KEY` in `.env` (empty for now).
