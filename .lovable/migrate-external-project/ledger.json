@@ -3,22 +3,22 @@
     "capability": "TalentIn search and demo frontend",
     "source": "GitHub src/talent and published / and /demo pages",
     "outcome": "migrate",
-    "status": "in_progress",
-    "next_action": "Restore source components and verify both routes on desktop and phone."
+    "status": "verified",
+    "next_action": "None."
   },
   {
     "capability": "Seeded brief, match, and team records",
     "source": "src/talent/mocks/brief.json, match.json, team.json",
     "outcome": "migrate",
-    "status": "in_progress",
-    "next_action": "Copy the bundled demo records and verify representative flows."
+    "status": "verified",
+    "next_action": "None."
   },
   {
     "capability": "English and Spanish interface, requirement editing, filters, evidence drawer, comparison, team optimisation view, gaps, CSV export",
     "source": "GitHub frontend components",
     "outcome": "migrate",
-    "status": "in_progress",
-    "next_action": "Exercise each primary control in the preview."
+    "status": "verified",
+    "next_action": "None."
   },
   {
     "capability": "Live brief parsing, profile matching, and team explanation API",
@@ -54,5 +54,26 @@
     "outcome": "not_applicable",
     "status": "confirmed_absent",
     "next_action": "None."
+  },
+  {
+    "capability": "Formation suggestions",
+    "source": "Existing TeamResult.training API plus new team-view presentation and seeded Kafka gaps",
+    "outcome": "migrate_and_complete",
+    "status": "verified",
+    "next_action": "None."
+  },
+  {
+    "capability": "TalentIn uploaded title logo and favicon",
+    "source": "user-uploads://logo_talentin.jpeg",
+    "outcome": "migrate",
+    "status": "verified",
+    "next_action": "None."
+  },
+  {
+    "capability": "Build, TypeScript, routing, state, desktop and phone interaction verification",
+    "source": "Local preview and Vitest",
+    "outcome": "verify",
+    "status": "verified",
+    "next_action": "8 tests passed; CSV export, filters, evidence, comparison, team, gaps, language, reset, and formation checks passed."
   }
 ]

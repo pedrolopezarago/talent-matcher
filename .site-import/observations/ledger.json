@@ -687,5 +687,624 @@
       "screenshot": "screenshots/demo_phone_after_clicks.png"
     }
   ],
-  "repair": "Restored the repository application components, mock data, styles, translations, route metadata, and state tests. Static captured controls were replaced with the original working interactions."
+  "repair": "Restored the repository application components, mock data, styles, translations, route metadata, and state tests. Static captured controls were replaced with the original working interactions.",
+  "preview_after_repair": [
+    {
+      "route": "",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "initial load",
+      "expected": "TalentIn main sections visible",
+      "observed": "TalentIn\n\nInternal mobility: find the right people already on the team.· Demo data (seeded)\n\nCore Banking Migration\nAI Assistant Retail\nCybersecurity Public Sector\nEn banca\nRoll-off <3m\nAsignado\nAny\n1+ years\n2+ years\n3+ years\n5+ years\n8+ years\n10+ years\nFind talent",
+      "status": "passed",
+      "screenshot": "screenshots/_desktop_initial.png"
+    },
+    {
+      "route": "",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "Core Banking Migration",
+      "expected": "Sample brief fills textarea",
+      "observed": "We are migrating a mid-size bank's core banking platform to AWS. We need a Cloud Architect with AWS and Terraform experience, two Java backend developers with microservices and Kaf",
+      "status": "passed",
+      "screenshot": null
+    },
+    {
+      "route": "",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "Find talent",
+      "expected": "Requirements editor appears",
+      "observed": "Requirements editor visible",
+      "status": "passed",
+      "screenshot": "screenshots/home_desktop_requirements.png"
+    },
+    {
+      "route": "",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "AWS requirement chip",
+      "expected": "Must/nice state toggles",
+      "observed": "AWS\nMust -> AWS\nNice to have",
+      "status": "passed",
+      "screenshot": null
+    },
+    {
+      "route": "",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "Add requirement form",
+      "expected": "New requirement chip appears",
+      "observed": "matches=1",
+      "status": "passed",
+      "screenshot": null
+    },
+    {
+      "route": "",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 465,
+      "trigger": "Find candidates",
+      "expected": "Ranked candidates and coverage appear",
+      "observed": "Lucía Ferrer Gil visible",
+      "status": "passed",
+      "screenshot": "screenshots/home_desktop_results.png"
+    },
+    {
+      "route": "",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 465,
+      "trigger": "Reserve lane",
+      "expected": "Assigned candidates revealed",
+      "observed": "aria-expanded=true",
+      "status": "passed",
+      "screenshot": "screenshots/home_desktop_reserve.png"
+    },
+    {
+      "route": "home",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 465,
+      "trigger": "candidate name",
+      "expected": "Evidence drawer with profile evidence",
+      "observed": "91%\nLucía Ferrer Gil\n\nSolutions Architect · Cloud & Infraestructura\n\nEn banca\nSenior\n11 years\nMadrid, España\nNTT0000101\nEvidence\nAWS\nNice to have\nMet\nAWS (nivel 5, 7 años)\nskills[0]\nTerraform\nMust\nMet\nTerraform\nproyectos[1].tecnologias[2]\nB",
+      "status": "passed",
+      "screenshot": "screenshots/home_desktop_evidence.png"
+    },
+    {
+      "route": "home",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 465,
+      "trigger": "Compare 2 button",
+      "expected": "Comparison dialog with two candidates",
+      "observed": "Compare\nRequirement\t\nCloud Architect\n91%\nLucía Ferrer Gil\nSenior · En banca\n\t\nCloud Architect\n84%\nMarco Bianchi\nLead · Roll-off próximo (<3 meses)\n\nAWS\nNice to have\n\t\nAWS (nivel 5, 7 años)\n\t\nAmazon Web Services (nivel 4, 5 años)\n\nTerraform\n",
+      "status": "passed",
+      "screenshot": "screenshots/home_desktop_compare.png"
+    },
+    {
+      "route": "home",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 92,
+      "trigger": "Create team",
+      "expected": "Optimal and greedy team view",
+      "observed": "elgado Marín\nElena Navarro Pons\n\nElena is the top cloud architect by one point, but she is also the best Java developer, where the alternative drops to 72%. Putting Lucía on architecture (91%) and Elena on Java (90%) raises the team from 85% to 90%.\n\nTeam coverage\nAWS · Lucía\nTerraform · Lucía\nBanca y Finanzas · Lucía\nJava · Elena, Javier\nMicroservicios · Elena, Javier\nKafka · Elena\nFormation suggestions\n\nTargeted upskilling for must-have requirements that are not fully met.\n\n2\nElena Navarro Pons\nJava backend developer\nKafka\n\nAdvanced Kafka streaming lab with Spring Cloud Stream\n\nJavier Ortega Ruiz\nJava backend developer\nKafka\n\nPair with Elena on Kafka producers, consumers, and event schemas",
+      "status": "passed",
+      "screenshot": "screenshots/home_desktop_team.png"
+    },
+    {
+      "route": "home",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 92,
+      "trigger": "Formation suggestions",
+      "expected": "Personal training recommendations for unmet must-have requirements",
+      "observed": "sed team\nOptimal assignment\n90%\nBest-per-role picking\n85%\n91%\nCloud Architect\nLucía Ferrer Gil\n90%\nJava backend developer · Slot 1\nElena Navarro Pons\n88%\nJava backend developer · Slot 2\nJavier Ortega Ruiz\nWhat changed\nCloud Architect\nElena Navarro Pons\nLucía Ferrer Gil\nJava backend developer\nSofía Delgado Marín\nElena Navarro Pons\n\nElena is the top cloud architect by one point, but she is also the best Java developer, where the alternative drops to 72%. Putting Lucía on architecture (91%) and Elena on Java (90%) raises the team from 85% to 90%.\n\nTeam coverage\nAWS · Lucía\nTerraform · Lucía\nBanca y Finanzas · Lucía\nJava · Elena, Javier\nMicroservicios · Elena, Javier\nKafka · Elena\nFormation suggestions\n\nTargeted upskilling for must-have requirements that are not fully met.\n\n2\nElena Navarro Pons\nJava backend developer\nKafka\n\nAdvanced Kafka streaming lab with Spring Cloud Stream\n\nJavier Ortega Ruiz\nJava backend developer\nKafka\n\nPair with Elena on Kafka producers, consumers, and event schemas",
+      "status": "passed",
+      "screenshot": "screenshots/home_desktop_formation.png"
+    },
+    {
+      "route": "home",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "Gaps tab",
+      "expected": "Coverage and uncovered requirements",
+      "observed": "Uncovered requirements visible",
+      "status": "passed",
+      "screenshot": "screenshots/home_desktop_gaps.png"
+    },
+    {
+      "route": "home",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "ES language toggle",
+      "expected": "Spanish navigation visible",
+      "observed": "Búsqueda visible",
+      "status": "passed",
+      "screenshot": "screenshots/home_desktop_spanish.png"
+    },
+    {
+      "route": "home",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "wheel to bottom",
+      "expected": "All content fits without scrolling at 1280x1800",
+      "observed": "Scroll {'y': 0, 'h': 1800} -> {'y': 0, 'h': 1800}; no overflow, so no scroll was required",
+      "status": "passed",
+      "screenshot": "screenshots/home_desktop_bottom.png"
+    },
+    {
+      "route": "home",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "return to top",
+      "expected": "Sticky header visible",
+      "observed": "y=0",
+      "status": "passed",
+      "screenshot": "screenshots/home_desktop_top.png"
+    },
+    {
+      "route": "",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "initial load",
+      "expected": "TalentIn main sections visible",
+      "observed": "TalentIn\n\nInternal mobility: find the right people already on the team.· Demo data (seeded)\n\nCore Banking Migration\nAI Assistant Retail\nCybersecurity Public Sector\nEn banca\nRoll-off <3m\nAsignado\nAny\n1+ years\n2+ years\n3+ years\n5+ years\n8+ years\n10+ years\nFind talent",
+      "status": "passed",
+      "screenshot": "screenshots/_phone_initial.png"
+    },
+    {
+      "route": "",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "Core Banking Migration",
+      "expected": "Sample brief fills textarea",
+      "observed": "We are migrating a mid-size bank's core banking platform to AWS. We need a Cloud Architect with AWS and Terraform experience, two Java backend developers with microservices and Kaf",
+      "status": "passed",
+      "screenshot": null
+    },
+    {
+      "route": "",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 495,
+      "trigger": "Find talent",
+      "expected": "Requirements editor appears",
+      "observed": "Requirements editor visible",
+      "status": "passed",
+      "screenshot": "screenshots/home_phone_requirements.png"
+    },
+    {
+      "route": "",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 495,
+      "trigger": "AWS requirement chip",
+      "expected": "Must/nice state toggles",
+      "observed": "AWS\nMust -> AWS\nNice to have",
+      "status": "passed",
+      "screenshot": null
+    },
+    {
+      "route": "",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 495,
+      "trigger": "Add requirement form",
+      "expected": "New requirement chip appears",
+      "observed": "matches=1",
+      "status": "passed",
+      "screenshot": null
+    },
+    {
+      "route": "",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 1212,
+      "trigger": "Find candidates",
+      "expected": "Ranked candidates and coverage appear",
+      "observed": "Lucía Ferrer Gil visible",
+      "status": "passed",
+      "screenshot": "screenshots/home_phone_results.png"
+    },
+    {
+      "route": "",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 2339,
+      "trigger": "Reserve lane",
+      "expected": "Assigned candidates revealed",
+      "observed": "aria-expanded=true",
+      "status": "passed",
+      "screenshot": "screenshots/home_phone_reserve.png"
+    },
+    {
+      "route": "home",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 1367,
+      "trigger": "candidate name",
+      "expected": "Evidence drawer with profile evidence",
+      "observed": "91%\nLucía Ferrer Gil\n\nSolutions Architect · Cloud & Infraestructura\n\nEn banca\nSenior\n11 years\nMadrid, España\nNTT0000101\nEvidence\nAWS\nNice to have\nMet\nAWS (nivel 5, 7 años)\nskills[0]\nTerraform\nMust\nMet\nTerraform\nproyectos[1].tecnologias[2]\nB",
+      "status": "passed",
+      "screenshot": "screenshots/home_phone_evidence.png"
+    },
+    {
+      "route": "home",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 1369,
+      "trigger": "Compare 2 button",
+      "expected": "Comparison dialog with two candidates",
+      "observed": "Compare\nCloud Architect\n91%\nLucía Ferrer Gil\n\nSenior · En banca\n\nAWS · Nice to have\nAWS (nivel 5, 7 años)\nTerraform · Must\nTerraform\nBanca y Finanzas · Nice to have\nBanca y Finanzas\nInglés · Must\nInglés C1\nKubernetes · Nice to have\nNot demo",
+      "status": "passed",
+      "screenshot": "screenshots/home_phone_compare.png"
+    },
+    {
+      "route": "home",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 983,
+      "trigger": "Create team",
+      "expected": "Optimal and greedy team view",
+      "observed": "elgado Marín\nElena Navarro Pons\n\nElena is the top cloud architect by one point, but she is also the best Java developer, where the alternative drops to 72%. Putting Lucía on architecture (91%) and Elena on Java (90%) raises the team from 85% to 90%.\n\nTeam coverage\nAWS · Lucía\nTerraform · Lucía\nBanca y Finanzas · Lucía\nJava · Elena, Javier\nMicroservicios · Elena, Javier\nKafka · Elena\nFormation suggestions\n\nTargeted upskilling for must-have requirements that are not fully met.\n\n2\nElena Navarro Pons\nJava backend developer\nKafka\n\nAdvanced Kafka streaming lab with Spring Cloud Stream\n\nJavier Ortega Ruiz\nJava backend developer\nKafka\n\nPair with Elena on Kafka producers, consumers, and event schemas",
+      "status": "passed",
+      "screenshot": "screenshots/home_phone_team.png"
+    },
+    {
+      "route": "home",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 1931,
+      "trigger": "Formation suggestions",
+      "expected": "Personal training recommendations for unmet must-have requirements",
+      "observed": "sed team\nOptimal assignment\n90%\nBest-per-role picking\n85%\n91%\nCloud Architect\nLucía Ferrer Gil\n90%\nJava backend developer · Slot 1\nElena Navarro Pons\n88%\nJava backend developer · Slot 2\nJavier Ortega Ruiz\nWhat changed\nCloud Architect\nElena Navarro Pons\nLucía Ferrer Gil\nJava backend developer\nSofía Delgado Marín\nElena Navarro Pons\n\nElena is the top cloud architect by one point, but she is also the best Java developer, where the alternative drops to 72%. Putting Lucía on architecture (91%) and Elena on Java (90%) raises the team from 85% to 90%.\n\nTeam coverage\nAWS · Lucía\nTerraform · Lucía\nBanca y Finanzas · Lucía\nJava · Elena, Javier\nMicroservicios · Elena, Javier\nKafka · Elena\nFormation suggestions\n\nTargeted upskilling for must-have requirements that are not fully met.\n\n2\nElena Navarro Pons\nJava backend developer\nKafka\n\nAdvanced Kafka streaming lab with Spring Cloud Stream\n\nJavier Ortega Ruiz\nJava backend developer\nKafka\n\nPair with Elena on Kafka producers, consumers, and event schemas",
+      "status": "passed",
+      "screenshot": "screenshots/home_phone_formation.png"
+    },
+    {
+      "route": "home",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 838,
+      "trigger": "Gaps tab",
+      "expected": "Coverage and uncovered requirements",
+      "observed": "Uncovered requirements visible",
+      "status": "passed",
+      "screenshot": "screenshots/home_phone_gaps.png"
+    },
+    {
+      "route": "home",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 883,
+      "trigger": "ES language toggle",
+      "expected": "Spanish navigation visible",
+      "observed": "Búsqueda visible",
+      "status": "passed",
+      "screenshot": "screenshots/home_phone_spanish.png"
+    },
+    {
+      "route": "home",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 941,
+      "trigger": "wheel to bottom",
+      "expected": "Bottom content visible",
+      "observed": "Scroll {'y': 0, 'h': 1785} -> {'y': 941, 'h': 1785}",
+      "status": "passed",
+      "screenshot": "screenshots/home_phone_bottom.png"
+    },
+    {
+      "route": "home",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "return to top",
+      "expected": "Sticky header visible",
+      "observed": "y=0",
+      "status": "passed",
+      "screenshot": "screenshots/home_phone_top.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "initial load",
+      "expected": "TalentIn main sections visible",
+      "observed": "TalentIn\n\nInternal mobility: find the right people already on the team.· Demo data (seeded)\n\nEn banca\nRoll-off <3m\nAsignado\nAny\n1+ years\n2+ years\n3+ years\n5+ years\n8+ years\n10+ years\nRequirements the AI found\n\nClick a chip to switch must ↔ nice to have. Musts weigh 3×; nice-to-haves never filter anyone out.\n\nStart: 2027-01-20\nCloud Architect\n1 people\nSenior\nCriticality ●●●●●\nAWS\nMust\nTerraform\nMust\nBanca y Finanzas\nNice to have\nInglés B2\nMust\nJava backend developer\n2 people\nMid\nCriticality ●●●●●",
+      "status": "passed",
+      "screenshot": "screenshots/demo_desktop_initial.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "candidate name",
+      "expected": "Evidence drawer with profile evidence",
+      "observed": "91%\nLucía Ferrer Gil\n\nSolutions Architect · Cloud & Infraestructura\n\nEn banca\nSenior\n11 years\nMadrid, España\nNTT0000101\nEvidence\nAWS\nMust\nMet\nAWS (nivel 5, 7 años)\nskills[0]\nTerraform\nMust\nMet\nTerraform\nproyectos[1].tecnologias[2]\nBanca y F",
+      "status": "passed",
+      "screenshot": "screenshots/demo_desktop_evidence.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "Compare 2 button",
+      "expected": "Comparison dialog with two candidates",
+      "observed": "Compare\nRequirement\t\nCloud Architect\n91%\nLucía Ferrer Gil\nSenior · En banca\n\t\nCloud Architect\n84%\nMarco Bianchi\nLead · Roll-off próximo (<3 meses)\n\nAWS\nMust\n\t\nAWS (nivel 5, 7 años)\n\t\nAmazon Web Services (nivel 4, 5 años)\n\nTerraform\nMust\n\t\nT",
+      "status": "passed",
+      "screenshot": "screenshots/demo_desktop_compare.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "Create team",
+      "expected": "Optimal and greedy team view",
+      "observed": "elgado Marín\nElena Navarro Pons\n\nElena is the top cloud architect by one point, but she is also the best Java developer, where the alternative drops to 72%. Putting Lucía on architecture (91%) and Elena on Java (90%) raises the team from 85% to 90%.\n\nTeam coverage\nAWS · Lucía\nTerraform · Lucía\nBanca y Finanzas · Lucía\nJava · Elena, Javier\nMicroservicios · Elena, Javier\nKafka · Elena\nFormation suggestions\n\nTargeted upskilling for must-have requirements that are not fully met.\n\n2\nElena Navarro Pons\nJava backend developer\nKafka\n\nAdvanced Kafka streaming lab with Spring Cloud Stream\n\nJavier Ortega Ruiz\nJava backend developer\nKafka\n\nPair with Elena on Kafka producers, consumers, and event schemas",
+      "status": "passed",
+      "screenshot": "screenshots/demo_desktop_team.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "Formation suggestions",
+      "expected": "Personal training recommendations for unmet must-have requirements",
+      "observed": "sed team\nOptimal assignment\n90%\nBest-per-role picking\n85%\n91%\nCloud Architect\nLucía Ferrer Gil\n90%\nJava backend developer · Slot 1\nElena Navarro Pons\n88%\nJava backend developer · Slot 2\nJavier Ortega Ruiz\nWhat changed\nCloud Architect\nElena Navarro Pons\nLucía Ferrer Gil\nJava backend developer\nSofía Delgado Marín\nElena Navarro Pons\n\nElena is the top cloud architect by one point, but she is also the best Java developer, where the alternative drops to 72%. Putting Lucía on architecture (91%) and Elena on Java (90%) raises the team from 85% to 90%.\n\nTeam coverage\nAWS · Lucía\nTerraform · Lucía\nBanca y Finanzas · Lucía\nJava · Elena, Javier\nMicroservicios · Elena, Javier\nKafka · Elena\nFormation suggestions\n\nTargeted upskilling for must-have requirements that are not fully met.\n\n2\nElena Navarro Pons\nJava backend developer\nKafka\n\nAdvanced Kafka streaming lab with Spring Cloud Stream\n\nJavier Ortega Ruiz\nJava backend developer\nKafka\n\nPair with Elena on Kafka producers, consumers, and event schemas",
+      "status": "passed",
+      "screenshot": "screenshots/demo_desktop_formation.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "Gaps tab",
+      "expected": "Coverage and uncovered requirements",
+      "observed": "Uncovered requirements visible",
+      "status": "passed",
+      "screenshot": "screenshots/demo_desktop_gaps.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "ES language toggle",
+      "expected": "Spanish navigation visible",
+      "observed": "Búsqueda visible",
+      "status": "passed",
+      "screenshot": "screenshots/demo_desktop_spanish.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "wheel to bottom",
+      "expected": "All content fits without scrolling at 1280x1800",
+      "observed": "Scroll {'y': 0, 'h': 1800} -> {'y': 0, 'h': 1800}; no overflow, so no scroll was required",
+      "status": "passed",
+      "screenshot": "screenshots/demo_desktop_bottom.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "return to top",
+      "expected": "Sticky header visible",
+      "observed": "y=0",
+      "status": "passed",
+      "screenshot": "screenshots/demo_desktop_top.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "desktop",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "New search",
+      "expected": "Navigate to /",
+      "observed": "http://localhost:8080/",
+      "status": "passed",
+      "screenshot": null
+    },
+    {
+      "route": "demo",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "initial load",
+      "expected": "TalentIn main sections visible",
+      "observed": "TalentIn\n\nInternal mobility: find the right people already on the team.· Demo data (seeded)\n\nEn banca\nRoll-off <3m\nAsignado\nAny\n1+ years\n2+ years\n3+ years\n5+ years\n8+ years\n10+ years\nRequirements the AI found\n\nClick a chip to switch must ↔ nice to have. Musts weigh 3×; nice-to-haves never filter anyone out.\n\nStart: 2027-01-20\nCloud Architect\n1 people\nSenior\nCriticality ●●●●●\nAWS\nMust\nTerraform\nMust\nBanca y Finanzas\nNice to have\nInglés B2\nMust\nJava backend developer\n2 people\nMid\nCriticality ●●●●●",
+      "status": "passed",
+      "screenshot": "screenshots/demo_phone_initial.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 1024,
+      "trigger": "candidate name",
+      "expected": "Evidence drawer with profile evidence",
+      "observed": "91%\nLucía Ferrer Gil\n\nSolutions Architect · Cloud & Infraestructura\n\nEn banca\nSenior\n11 years\nMadrid, España\nNTT0000101\nEvidence\nAWS\nMust\nMet\nAWS (nivel 5, 7 años)\nskills[0]\nTerraform\nMust\nMet\nTerraform\nproyectos[1].tecnologias[2]\nBanca y F",
+      "status": "passed",
+      "screenshot": "screenshots/demo_phone_evidence.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 1026,
+      "trigger": "Compare 2 button",
+      "expected": "Comparison dialog with two candidates",
+      "observed": "Compare\nCloud Architect\n91%\nLucía Ferrer Gil\n\nSenior · En banca\n\nAWS · Must\nAWS (nivel 5, 7 años)\nTerraform · Must\nTerraform\nBanca y Finanzas · Nice to have\nBanca y Finanzas\nInglés · Must\nInglés C1\nStrengths\n7 years of AWS at level 5 · Led ",
+      "status": "passed",
+      "screenshot": "screenshots/demo_phone_compare.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 870,
+      "trigger": "Create team",
+      "expected": "Optimal and greedy team view",
+      "observed": "elgado Marín\nElena Navarro Pons\n\nElena is the top cloud architect by one point, but she is also the best Java developer, where the alternative drops to 72%. Putting Lucía on architecture (91%) and Elena on Java (90%) raises the team from 85% to 90%.\n\nTeam coverage\nAWS · Lucía\nTerraform · Lucía\nBanca y Finanzas · Lucía\nJava · Elena, Javier\nMicroservicios · Elena, Javier\nKafka · Elena\nFormation suggestions\n\nTargeted upskilling for must-have requirements that are not fully met.\n\n2\nElena Navarro Pons\nJava backend developer\nKafka\n\nAdvanced Kafka streaming lab with Spring Cloud Stream\n\nJavier Ortega Ruiz\nJava backend developer\nKafka\n\nPair with Elena on Kafka producers, consumers, and event schemas",
+      "status": "passed",
+      "screenshot": "screenshots/demo_phone_team.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 1588,
+      "trigger": "Formation suggestions",
+      "expected": "Personal training recommendations for unmet must-have requirements",
+      "observed": "sed team\nOptimal assignment\n90%\nBest-per-role picking\n85%\n91%\nCloud Architect\nLucía Ferrer Gil\n90%\nJava backend developer · Slot 1\nElena Navarro Pons\n88%\nJava backend developer · Slot 2\nJavier Ortega Ruiz\nWhat changed\nCloud Architect\nElena Navarro Pons\nLucía Ferrer Gil\nJava backend developer\nSofía Delgado Marín\nElena Navarro Pons\n\nElena is the top cloud architect by one point, but she is also the best Java developer, where the alternative drops to 72%. Putting Lucía on architecture (91%) and Elena on Java (90%) raises the team from 85% to 90%.\n\nTeam coverage\nAWS · Lucía\nTerraform · Lucía\nBanca y Finanzas · Lucía\nJava · Elena, Javier\nMicroservicios · Elena, Javier\nKafka · Elena\nFormation suggestions\n\nTargeted upskilling for must-have requirements that are not fully met.\n\n2\nElena Navarro Pons\nJava backend developer\nKafka\n\nAdvanced Kafka streaming lab with Spring Cloud Stream\n\nJavier Ortega Ruiz\nJava backend developer\nKafka\n\nPair with Elena on Kafka producers, consumers, and event schemas",
+      "status": "passed",
+      "screenshot": "screenshots/demo_phone_formation.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 495,
+      "trigger": "Gaps tab",
+      "expected": "Coverage and uncovered requirements",
+      "observed": "Uncovered requirements visible",
+      "status": "passed",
+      "screenshot": "screenshots/demo_phone_gaps.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 539,
+      "trigger": "ES language toggle",
+      "expected": "Spanish navigation visible",
+      "observed": "Búsqueda visible",
+      "status": "passed",
+      "screenshot": "screenshots/demo_phone_spanish.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 631,
+      "trigger": "wheel to bottom",
+      "expected": "Bottom content visible",
+      "observed": "Scroll {'y': 0, 'h': 1475} -> {'y': 631, 'h': 1475}",
+      "status": "passed",
+      "screenshot": "screenshots/demo_phone_bottom.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "return to top",
+      "expected": "Sticky header visible",
+      "observed": "y=0",
+      "status": "passed",
+      "screenshot": "screenshots/demo_phone_top.png"
+    },
+    {
+      "route": "demo",
+      "viewport": "phone",
+      "scroll_container": "window",
+      "scroll_position": 0,
+      "trigger": "New search",
+      "expected": "Navigate to /",
+      "observed": "http://localhost:8080/",
+      "status": "passed",
+      "screenshot": null
+    }
+  ],
+  "final_checks": [
+    {
+      "viewport": "desktop",
+      "check": "availability filter",
+      "passed": true,
+      "observed": "Marco matches=0"
+    },
+    {
+      "viewport": "desktop",
+      "check": "minimum years filter",
+      "passed": true,
+      "observed": "Elena matches=0"
+    },
+    {
+      "viewport": "desktop",
+      "check": "CSV export",
+      "passed": true,
+      "observed": "equipo.csv, 4 rows"
+    },
+    {
+      "viewport": "desktop",
+      "check": "Spanish formation suggestions",
+      "passed": true,
+      "observed": "matches=1"
+    },
+    {
+      "viewport": "desktop",
+      "check": "runtime errors",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "viewport": "phone",
+      "check": "availability filter",
+      "passed": true,
+      "observed": "Marco matches=0"
+    },
+    {
+      "viewport": "phone",
+      "check": "minimum years filter",
+      "passed": true,
+      "observed": "Elena matches=0"
+    },
+    {
+      "viewport": "phone",
+      "check": "CSV export",
+      "passed": true,
+      "observed": "equipo.csv, 4 rows"
+    },
+    {
+      "viewport": "phone",
+      "check": "Spanish formation suggestions",
+      "passed": true,
+      "observed": "matches=1"
+    },
+    {
+      "viewport": "phone",
+      "check": "runtime errors",
+      "passed": true,
+      "observed": []
+    }
+  ],
+  "final_build": "build OK; TypeScript passed; 8 tests passed; no browser runtime errors",
+  "additional_features": [
+    "Formation suggestions display per-person course and mentoring recommendations for unmet must-have requirements, with English and Spanish headings.",
+    "The selected TalentIn text title was replaced with the uploaded logo on / and /demo; a matching favicon was added."
+  ]
 }
