@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { profileEntries, selectionKey, toggleSelection, visibleResults } from "./results-state";
 import { Spinner } from "./components/ui";
 import { LangContext, loadLang, saveLang, translate } from "./i18n";
-import logoTalentIn from "@/assets/talentin_wordmark.png.asset.json";
 
 export default function App({ isDemo = false }: { isDemo?: boolean }) {
   const [lang, setLang] = useState<Lang>("en");
@@ -136,7 +135,7 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
 
       <main className="mx-auto max-w-5xl space-y-8 px-4 py-6 pb-28 sm:px-6 sm:py-8">
         <div className="pt-4">
-          <h1><img src={logoTalentIn.url} alt="TalentIn" className="h-auto w-72 max-w-full sm:w-80" /></h1>
+          <h1 className="text-4xl font-semibold text-ink">TalentIn</h1>
           <p className="mt-1 text-[15px] text-muted">{t("tagline")}{api.usingMocks && <span className="ml-2 text-xs font-medium text-brand">· {t("mockNote")}</span>}</p>
         </div>
         <BriefInput text={text} setText={setText} onAnalyse={analyse} loading={loading === "parse"} filters={filters} setFilters={setFilters} showInput={!isDemo || !result} />
