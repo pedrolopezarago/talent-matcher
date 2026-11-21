@@ -1,7 +1,8 @@
-import { ArrowRight, ChevronDown, Filter, Languages, MapPin, ShieldCheck, Sparkles, Users } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, Filter, Languages, MapPin, ShieldCheck, Sparkles, Users } from "lucide-react";
 import { useState } from "react";
 import type { Brief, Candidate, MatchResult, Requirement, RoleResult } from "@/shared/contract";
-import { useT } from "../i18n";
+import { useContext } from "react";
+import { LangContext, useT } from "../i18n";
 import type { HardFilters } from "./BriefInput";
 import { availabilityTone, Card, FitRing, Pill, StatusIcon } from "./ui";
 
@@ -20,6 +21,7 @@ export function Results({ brief, result, filters, selected, toggleSelect, onOpen
 
   return (
     <div className="space-y-4">
+      <Kpis brief={brief} result={result} pass={pass} />
       <div className="flex flex-wrap items-center gap-2 overflow-x-auto">
         {result.roles.map((r) => {
           const ro = brief.roles.find((x) => x.id === r.role_id);
@@ -28,7 +30,7 @@ export function Results({ brief, result, filters, selected, toggleSelect, onOpen
             <button
               key={r.role_id}
               onClick={() => setActive(r.role_id)}
-              className={`rounded-2xl px-4 py-2 text-sm font-medium transition ${on ? "bg-brand text-on-brand" : "bg-surface text-ink border border-line hover:border-ink/30"}`}
+              className={`rounded-full px-5 py-2.5 text-sm font-medium transition ${on ? "bg-brand text-on-brand" : "bg-surface text-muted hover:text-ink"}`}
             >
               {ro?.title ?? r.role_id}
               <span className={`ml-2 text-xs ${on ? "text-on-brand/80" : "text-muted"}`}>{r.candidates.filter(pass).length}</span>
@@ -45,7 +47,7 @@ export function Results({ brief, result, filters, selected, toggleSelect, onOpen
 
       <Funnel rr={rr} />
 
-      <div className="space-y-3">
+      <div className="grid gap-4 lg:grid-cols-2">
         {shown.length === 0 && <Card className="p-6 text-center text-sm text-muted">{t("noMatches")}</Card>}
         {shown.map((c, i) => (
           <CandidateCard
@@ -95,79 +97,131 @@ export function CandidateCard({ c, rank, reqs, selected, onSelect, onOpen, muted
   onSelect?: () => void; onOpen: () => void; muted?: boolean;
 }) {
   const t = useT();
+  const es = useContext(LangContext) === "es";
   const reqById = Object.fromEntries(reqs.map((r) => [r.id, r]));
+  const implicitMet = c.coverage.map((cv) => reqById[cv.req_id]).filter((r): r is Requirement => !!r && r.implicit && c.coverage.some((cv) => cv.req_id === r.id && cv.status !== "missing"));
+  const avShort = c.availability.replace("Roll-off próximo (<3 meses)", "Roll-off <3 meses");
   return (
-    <Card className={`group p-4 transition hover:border-brand/40 hover:shadow-md sm:p-5 ${selected ? "ring-2 ring-brand" : ""} ${muted ? "opacity-80" : ""}`}>
-      <div className="flex gap-4">
-        <div className="flex flex-col items-center gap-1">
-          <FitRing fit={c.fit} />
-          <span className="text-[11px] text-muted">#{rank}</span>
-        </div>
-
+    <Card className={`flex flex-col p-6 transition ${selected ? "ring-2 ring-orange" : ""} ${muted ? "opacity-80" : ""}`}>
+      <div className="flex items-start gap-3">
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <button onClick={onOpen} className="text-left font-semibold hover:text-brand">{c.name}</button>
-            <Pill tone={availabilityTone(c.availability)}>{c.availability}</Pill>
-            {c.hidden.different_area && <Pill tone="hidden"><Sparkles size={11} />{t("differentArea")}</Pill>}
-            {onSelect && (
-              <label className="ml-auto inline-flex cursor-pointer items-center gap-1.5 text-xs text-muted">
-                <input type="checkbox" checked={selected} onChange={onSelect} className="accent-brand" />
-                {t("compare")}
-              </label>
-            )}
-          </div>
-          <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-sm text-muted">
-            <span>{c.current_role} · {c.area} · {c.seniority}</span>
-            <span className="font-medium text-ink">{t("experience")}: {c.years_experience} {t("years")}</span>
-            <span className="inline-flex items-center gap-0.5"><MapPin size={12} />{c.city}, {c.country}</span>
-          </p>
+          <div className="text-[11px] font-medium text-muted">#{rank}</div>
+          <button onClick={onOpen} className="text-left text-lg font-semibold leading-tight tracking-tight hover:underline">{c.name}</button>
+          <p className="mt-0.5 text-sm text-muted">{c.current_role} · {c.seniority}</p>
+        </div>
+        <button onClick={onOpen} aria-label={t("evidence")} className="grid size-9 shrink-0 place-items-center rounded-full bg-canvas transition hover:bg-brand hover:text-on-brand">
+          <ArrowUpRight size={16} />
+        </button>
+      </div>
 
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {c.coverage.map((cv) => {
-              const r = reqById[cv.req_id];
-              if (!r) return null;
-              return (
-                <span key={cv.req_id} className="inline-flex items-center gap-1 rounded-md bg-cream px-2 py-0.5 text-xs text-ink">
-                  <StatusIcon status={cv.status} size={12} />
-                  {r.type === "language" && <Languages size={11} className="text-muted" />}
-                  <span className={r.must ? "font-semibold" : ""}>{r.value}{r.level ? ` · ${r.level}` : ""}</span>
-                </span>
-              );
-            })}
-          </div>
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <span className="rounded-full bg-orange px-3 py-1 text-xs font-semibold text-on-brand">{c.fit}% match</span>
+        <span className={`rounded-full px-3 py-1 text-xs font-medium ${c.availability === "En banca" ? "bg-brand text-on-brand" : "bg-canvas text-ink"}`}>{avShort}</span>
+        {c.hidden.different_area && <span className="inline-flex items-center gap-1 rounded-full bg-canvas px-3 py-1 text-xs font-medium"><Sparkles size={11} />{t("differentArea")}</span>}
+        {onSelect && (
+          <label className="ml-auto inline-flex cursor-pointer items-center gap-1.5 text-xs text-muted">
+            <input type="checkbox" checked={selected} onChange={onSelect} className="accent-orange" />
+            {t("compare")}
+          </label>
+        )}
+      </div>
 
-          {c.hidden.vocab_bridges.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {c.hidden.vocab_bridges.map((b) => (
-                <Pill key={b.asked + b.found} tone="hidden">
-                  {b.asked} <span className="opacity-60">→ {t("foundAs")}</span> {b.found}
-                </Pill>
-              ))}
-            </div>
+      <div className="mt-5 grid grid-cols-2 gap-3">
+        <div className="rounded-2xl bg-canvas p-4">
+          <div className="text-3xl font-semibold tabular-nums tracking-tight">{c.years_experience}</div>
+          <div className="text-xs text-muted">{es ? "años de experiencia" : "years experience"}</div>
+        </div>
+        <div className="rounded-2xl bg-canvas p-4" title={es ? "Dato no disponible en el perfil" : "Not in the profile data"}>
+          <div className="text-3xl font-semibold tabular-nums tracking-tight text-muted">—</div>
+          <div className="text-xs text-muted">{es ? "años en la empresa" : "years at company"}</div>
+        </div>
+      </div>
+
+      <div className="mt-5">
+        <div className="text-xs font-semibold uppercase tracking-wide text-muted">{t("whyFits")}</div>
+        <p className="mt-1.5 text-sm leading-relaxed">
+          {c.strengths.map((x) => x.replace(/[.\s]+$/, "")).join(". ")}.
+          {implicitMet.length > 0 && <span className="text-muted"> {es ? "Cubre requisitos implícitos:" : "Covers implicit needs:"} {implicitMet.map((r) => r.value).join(", ")}.</span>}
+        </p>
+        {c.hidden.vocab_bridges.length > 0 && (
+          <p className="mt-1 text-xs text-muted">{c.hidden.vocab_bridges.map((b) => `${b.asked} → ${b.found}`).join(" · ")}</p>
+        )}
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {c.coverage.map((cv) => {
+            const r = reqById[cv.req_id];
+            if (!r) return null;
+            return (
+              <span key={cv.req_id} className="inline-flex items-center gap-1 rounded-full bg-canvas px-3 py-1 text-xs">
+                <StatusIcon status={cv.status} size={12} />
+                {r.type === "language" && <Languages size={11} className="text-muted" />}
+                <span className={r.must ? "font-semibold" : ""}>{r.value}</span>
+                {r.level && <span className="text-muted">{r.level}</span>}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-auto pt-5">
+        <div className="rounded-2xl bg-orange/10 p-4 text-sm text-warn">
+          <div className="mb-1 text-xs font-semibold uppercase tracking-wide">{t("risksGaps")}</div>
+          {c.gaps.length + c.risks.length === 0 ? <p className="opacity-80">{t("noRisks")}</p> : (
+            <ul className="space-y-0.5 leading-relaxed">
+              {[...c.gaps, ...c.risks].map((x) => <li key={x} className="flex gap-1.5"><span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-orange" />{x}</li>)}
+            </ul>
           )}
-
-          <div className="mt-4 grid gap-3 text-sm md:grid-cols-2">
-            <div className="rounded-lg border border-sage-line bg-sage/40 p-3">
-              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-ok">{t("whyFits")}</div>
-              <ul className="space-y-0.5 leading-relaxed">{c.strengths.map((x) => <li key={x}>{x}</li>)}</ul>
-            </div>
-            <div className="rounded-lg border border-orange/60 bg-bad-soft p-3">
-              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-bad">{t("risksGaps")}</div>
-              {c.gaps.length + c.risks.length === 0 ? <p className="text-muted">{t("noRisks")}</p> : (
-                <ul className="space-y-0.5 leading-relaxed">
-                  {c.gaps.map((x) => <li key={"g" + x} className="flex gap-1.5"><span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-orange" />{x}</li>)}
-                  {c.risks.map((x) => <li key={"r" + x} className="flex gap-1.5"><span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-peach" />{x}</li>)}
-                </ul>
-              )}
-            </div>
-          </div>
-
-          <button onClick={onOpen} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-brand opacity-80 hover:opacity-100">
-            {t("evidence")} <ArrowRight size={12} />
-          </button>
         </div>
       </div>
     </Card>
+  );
+}
+
+function Kpis({ brief, result, pass }: { brief: Brief; result: MatchResult; pass: (c: Candidate) => boolean }) {
+  const es = useContext(LangContext) === "es";
+  const picks = result.roles.flatMap((r) => {
+    const hc = brief.roles.find((x) => x.id === r.role_id)?.headcount ?? 1;
+    return r.candidates.filter(pass).slice(0, hc).map((c) => ({ c, need: hc }));
+  });
+  const slots = brief.roles.reduce((n, r) => n + r.headcount, 0);
+  const ids = new Set(picks.map((p) => p.c.employee_id));
+  const complete = picks.length >= slots && ids.size === picks.length;
+  const coverage = picks.length ? Math.round(picks.reduce((s, p) => s + p.c.fit, 0) / slots) : 0;
+  const all = Array.from(new Map(result.roles.flatMap((r) => r.candidates).filter(pass).map((c) => [c.employee_id, c])).values());
+  const bench = all.filter((c) => c.availability === "En banca").length;
+  const roll = all.filter((c) => c.availability.startsWith("Roll-off")).length;
+  const assigned = all.length - bench - roll;
+  const max = Math.max(bench, roll, assigned, 1);
+  const bars = [
+    { n: bench, label: es ? "En banca" : "Bench", hi: true },
+    { n: roll, label: "Roll-off" },
+    { n: assigned, label: es ? "Asignado" : "Assigned" },
+  ];
+  return (
+    <div className="grid gap-4 sm:grid-cols-2">
+      <Card className="p-6">
+        <div className="text-sm text-muted">{es ? "Cobertura del equipo" : "Team coverage"}</div>
+        <div className="mt-2 flex flex-wrap items-end gap-3">
+          <span className="text-4xl font-semibold tabular-nums tracking-tight">{coverage}%</span>
+          <span className={`mb-1 rounded-full px-3 py-1 text-xs font-semibold ${complete ? "bg-orange text-on-brand" : "bg-orange/10 text-warn"}`}>
+            {complete ? (es ? "Equipo completo sin duplicados" : "Full team, no duplicates") : (es ? `${picks.length}/${slots} puestos cubiertos` : `${picks.length}/${slots} slots filled`)}
+          </span>
+        </div>
+      </Card>
+      <Card className="p-6">
+        <div className="text-sm text-muted">{es ? "Disponibilidad inmediata" : "Immediate availability"}</div>
+        <div className="mt-2 flex items-end justify-between gap-4">
+          <div>
+            <span className="text-4xl font-semibold tabular-nums tracking-tight">{bench}</span>
+            <span className="ml-1.5 text-sm text-muted">{es ? "en banca" : "on bench"} · {roll} roll-off</span>
+          </div>
+          <div className="flex h-12 items-end gap-1.5">
+            {bars.map((b) => (
+              <div key={b.label} title={`${b.label}: ${b.n}`} className={`w-5 rounded-full ${b.hi ? "bg-orange" : "bg-brand-soft"}`} style={{ height: `${Math.max(12, (b.n / max) * 100)}%` }} />
+            ))}
+          </div>
+        </div>
+      </Card>
+    </div>
   );
 }
 
@@ -176,7 +230,7 @@ function ReserveLane({ rr, reqs, onOpen }: { rr: RoleResult; reqs: Requirement[]
   const t = useT();
   const [open, setOpen] = useState(false);
   return (
-    <div className="rounded-2xl border border-dashed border-line p-4">
+    <div className="rounded-3xl border-2 border-dashed border-brand-soft p-6">
       <button onClick={() => setOpen(!open)} className="flex w-full items-center gap-2 text-left">
         <span className="font-medium">{t("reserveTitle")}</span>
         <Pill>{rr.reserve.length}</Pill>
@@ -184,7 +238,7 @@ function ReserveLane({ rr, reqs, onOpen }: { rr: RoleResult; reqs: Requirement[]
       </button>
       <p className="mt-1 text-xs text-muted">{t("reserveHint")}</p>
       {open && (
-        <div className="mt-3 space-y-3">
+        <div className="mt-3 grid gap-4 lg:grid-cols-2">
           {rr.reserve.map((c, i) => (
             <CandidateCard key={c.employee_id} c={c} rank={i + 1} reqs={reqs} onOpen={() => onOpen(c)} muted />
           ))}

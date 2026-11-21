@@ -106,7 +106,7 @@
   --canvas: oklch(0.967 0.001 286);
   --ok: oklch(0.68 0.21 45);
   --ok-soft: oklch(0.95 0.04 50);
-  --warn: oklch(0.5 0.12 45);
+  --warn: oklch(0.55 0.18 40);
   --warn-soft: oklch(0.86 0.09 50);
   --bad: oklch(0.52 0.15 50);
   --bad-soft: oklch(0.94 0.04 60);
