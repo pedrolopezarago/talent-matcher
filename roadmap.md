@@ -12,3 +12,4 @@
 - [x] Use the newly uploaded wordmark as the page title and verify it renders.
 - [x] Add dynamic team weakness and risk analysis with actionable recommendations.
 - [x] Test the risk rules and verify the team view on desktop and phone.
+- [x] Restore the plain text "TalentIn" title and remove the logo image from the heading.
