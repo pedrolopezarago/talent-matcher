@@ -99,5 +99,33 @@
         "NTT0000404"
       ]
     }
+  ],
+  "training": [
+    {
+      "employee_id": "NTT0000404",
+      "name": "Elena Navarro Pons",
+      "role_id": "r2",
+      "gaps": ["Kafka"],
+      "recommendations": [
+        {
+          "requirement": "Kafka",
+          "training": "Advanced Kafka streaming lab with Spring Cloud Stream",
+          "kind": "course"
+        }
+      ]
+    },
+    {
+      "employee_id": "NTT0000303",
+      "name": "Javier Ortega Ruiz",
+      "role_id": "r2",
+      "gaps": ["Kafka"],
+      "recommendations": [
+        {
+          "requirement": "Kafka",
+          "training": "Pair with Elena on Kafka producers, consumers, and event schemas",
+          "kind": "mentoring"
+        }
+      ]
+    }
   ]
 }

@@ -19,7 +19,7 @@
       "requirements": [
         {"id": "r2-q1", "type": "skill", "value": "Java", "must": true, "implicit": false, "weight": 3, "source_quote": "Java backend developers", "synonyms": ["Spring Boot"]},
         {"id": "r2-q2", "type": "skill", "value": "Microservicios", "must": true, "implicit": false, "weight": 2, "source_quote": "microservices", "synonyms": ["Spring Cloud"]},
-        {"id": "r2-q3", "type": "skill", "value": "Kafka", "must": false, "implicit": false, "weight": 1, "source_quote": "and Kafka", "synonyms": ["Event streaming"]}
+        {"id": "r2-q3", "type": "skill", "value": "Kafka", "must": true, "implicit": false, "weight": 2, "source_quote": "and Kafka", "synonyms": ["Event streaming"]}
       ]
     }
   ]
