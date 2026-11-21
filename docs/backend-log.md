@@ -68,3 +68,11 @@ Running log of what the backend team did and why. Newest at the bottom.
 
 ### Location
 - NTT DATA confirmed everyone can work remotely: location is never a filter nor a risk (judge prompt told not to flag it).
+
+### First live run (brief 1, core banking, SCREEN_MAX_PER_ROLE=200, JUDGE_TOP_N=40)
+- First attempt: every screening batch hit `max_tokens` (adaptive thinking used the 4,000-token budget) → 502 (as designed). Also the parser turned "hybrid in Madrid" into a MUST requirement.
+- Fixes: screening on Haiku runs without thinking (simple scoring pass); max_tokens 16,000 for extract/screen/judge; prompt rule + code guard that drops location / work-mode requirements (NTT DATA: everyone can work remotely).
+- Second attempt, measured: parse 10.5 s, $0.03 · match 73.6 s, 27 LLM calls, **$1.14** (3 roles; mostly Sonnet judging 40 + 5 reserve per role) · team instant, $0.
+- Grounding: 1,774 claims checked, 3 dropped. Top candidates cover every requirement with real evidence; risks flag old projects and roll-off timing; one vocabulary bridge (Microservicios ← Spring Boot).
+- Cost cap overshoots (0.75 → 1.14): up to MAX_LLM_CONCURRENCY judge calls are already in flight when the cap is crossed.
+- Optimal team = greedy for this brief (deep pool, no contention).

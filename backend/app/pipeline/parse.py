@@ -1,5 +1,6 @@
 """Step 1 — free-text brief → structured Brief (one LLM call, then code-side clamping)."""
 import json
+import re
 
 from backend.app.config import settings
 from backend.app.llm import complete_json
@@ -46,6 +47,7 @@ SCHEMA = {
 SYSTEM = """You turn a staffing request for NTT DATA into structured roles and requirements.
 
 Rules:
+- Never create requirements about location, city, country or work mode (remote, hybrid, on-site): everyone at NTT DATA can work remotely.
 - Create exactly the roles the brief asks for, with their headcount. Add a Project Manager only if the brief asks for one.
 - Map every requirement value onto the vocabulary below when a match exists (skills, sectors, roles), keeping the vocabulary spelling.
   Languages use Spanish names as in the data (Inglés, Español, Francés...) and CEFR levels (A1-C2 or Nativo) in `level`.
@@ -66,6 +68,17 @@ Sectors: {sectors}
 Skills: {skills}"""
 
 
+# NTT DATA: everyone can work remotely, so location / work mode is never a requirement.
+LOCATION_WORDS = re.compile(
+    r"\b(remote|remoto|remota|hybrid|h[ií]brid[oa]|presencial|on-?site|in-office|oficina|location|ubicaci[oó]n|"
+    r"relocat\w*|reubicaci[oó]n|teletrabajo|madrid|barcelona|valencia|sevilla|bilbao|m[aá]laga|lisboa|london|city|ciudad)\b",
+    re.IGNORECASE)
+
+
+def _is_location(req: dict) -> bool:
+    return req.get("type") in ("other", "client_facing", "soft_skill") and bool(LOCATION_WORDS.search(req.get("value") or ""))
+
+
 def _clamp(v, lo, hi):
     return max(lo, min(hi, int(v)))
 
@@ -79,7 +92,7 @@ async def parse_brief(text: str, lang: str, today: str | None = None) -> Brief:
         lang_name="Spanish" if lang == "es" else "English",
         roles=", ".join(v.roles), areas=", ".join(v.areas), sectors=", ".join(v.sectors), skills=", ".join(v.skills),
     )
-    raw = await complete_json("extract", system, text, SCHEMA, max_tokens=8000)
+    raw = await complete_json("extract", system, text, SCHEMA, max_tokens=16000)
 
     roles = raw.get("roles") or []
     if not roles:
@@ -89,7 +102,8 @@ async def parse_brief(text: str, lang: str, today: str | None = None) -> Brief:
         role["headcount"] = max(1, int(role.get("headcount") or 1))
         role["criticality"] = _clamp(role.get("criticality") or 3, 1, 5)
         role["review_depth"] = _clamp(role.get("review_depth") or 300, 100, settings.screen_max_per_role)
-        for j, req in enumerate(role.get("requirements") or [], start=1):
+        role["requirements"] = [q for q in role.get("requirements") or [] if not _is_location(q)]
+        for j, req in enumerate(role["requirements"], start=1):
             req["id"] = f"r{i}-q{j}"
             req["weight"] = _clamp(req.get("weight") or 1, 1, 3)
             req["synonyms"] = req.get("synonyms") or []

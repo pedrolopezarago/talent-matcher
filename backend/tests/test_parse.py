@@ -82,3 +82,16 @@ def test_route_llm_failure_is_502():
     llm.fake_responses["extract"] = boom
     r = TestClient(app).post("/api/brief/parse", json={"text": "hello"})
     assert r.status_code == 502
+
+
+async def test_location_requirements_removed():
+    raw = copy.deepcopy(RAW)
+    reqs = raw["roles"][0]["requirements"]
+    reqs.append({"type": "other", "value": "Hybrid work in Madrid", "level": None, "must": True, "implicit": False,
+                 "weight": 2, "source_quote": "hybrid in Madrid", "synonyms": []})
+    reqs.append({"type": "other", "value": "Trabajo presencial", "level": None, "must": True, "implicit": False,
+                 "weight": 1, "source_quote": "presencial", "synonyms": []})
+    llm.fake_responses["extract"] = lambda u: raw
+    b = await parse.parse_brief("x", "en")
+    assert [r.value for r in b.roles[0].requirements] == ["RAG", "Retail"]
+    assert [r.id for r in b.roles[0].requirements] == ["r1-q1", "r1-q2"]

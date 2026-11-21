@@ -46,7 +46,7 @@ async def screen(role: Role, profiles: list[dict], top_n: int) -> tuple[list[str
         ids = {p["employee_id"] for p in batch}
         user = "Candidates:\n" + "\n".join(compact_card(p) for p in batch)
         try:
-            out = await complete_json("screen", system, user, SCHEMA, max_tokens=4000, budgeted=True)
+            out = await complete_json("screen", system, user, SCHEMA, max_tokens=16000, budgeted=True)
         except LLMError as e:
             log.warning("screen batch failed: %s", e)
             failed += 1
