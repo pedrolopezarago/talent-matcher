@@ -34,7 +34,7 @@ export function RequirementsEditor({ brief, setBrief, onFind, loading }: {
         <button
           onClick={onFind}
           disabled={loading}
-          className="inline-flex items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-on-brand transition hover:bg-brand-dark active:scale-[0.98] disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-xl bg-brand py-2.5 pl-3.5 pr-4 text-sm font-semibold text-on-brand transition-[scale,background-color] duration-150 ease-out hover:bg-brand-dark enabled:active:scale-[0.96] disabled:opacity-50"
         >
           {loading ? <Spinner /> : <Search size={16} />}
           {loading ? t("matching") : t("findCandidates")}

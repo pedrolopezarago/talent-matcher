@@ -13,7 +13,7 @@ export function CompareBar({ n, onOpen, onClear }: { n: number; onOpen: () => vo
         <button onClick={onClear} className="text-on-brand/60 hover:text-on-brand">{t("clear")}</button>
         <button
           onClick={onOpen} disabled={n < 2}
-          className="rounded-xl bg-brand px-3 py-1.5 font-semibold transition hover:bg-brand-dark disabled:opacity-40"
+          className="rounded-lg bg-on-brand px-3 py-1.5 font-semibold text-brand-dark transition-[scale,opacity] duration-150 ease-out enabled:active:scale-[0.96] disabled:opacity-40"
         >
           {t("compareN", { n })}
         </button>
@@ -28,7 +28,7 @@ export function CompareModal({ cands, reqs, onClose }: { cands: Candidate[]; req
   return (
     <div className="fixed inset-0 z-40 grid place-items-center p-4">
       <div className="absolute inset-0 bg-brand/30 backdrop-blur-[2px]" onClick={onClose} />
-      <div className="relative max-h-[90vh] w-full max-w-5xl overflow-auto rounded-xl bg-surface shadow-2xl">
+      <div className="relative max-h-[90vh] w-full max-w-5xl overflow-auto overscroll-contain rounded-xl bg-surface shadow-2xl">
         <div className="sticky top-0 z-10 flex items-center border-b border-line bg-surface px-5 py-3">
           <h3 className="font-semibold">{t("compare")}</h3>
           <button onClick={onClose} aria-label={t("close")} className="ml-auto rounded-lg p-1.5 text-muted hover:bg-canvas"><X size={18} /></button>

@@ -97,7 +97,7 @@ export function CandidateCard({ c, rank, reqs, selected, onSelect, onOpen, muted
   const t = useT();
   const reqById = Object.fromEntries(reqs.map((r) => [r.id, r]));
   return (
-    <Card className={`group p-4 transition hover:border-brand/40 hover:shadow-md sm:p-5 ${selected ? "ring-2 ring-brand" : ""} ${muted ? "opacity-80" : ""}`}>
+    <Card className={`group p-4 transition-[border-color,box-shadow] duration-150 hover:border-brand/40 hover:shadow-md sm:p-5 ${selected ? "ring-2 ring-brand" : ""} ${muted ? "opacity-80" : ""}`}>
       <div className="flex gap-4">
         <div className="flex flex-col items-center gap-1">
           <FitRing fit={c.fit} />
@@ -148,11 +148,11 @@ export function CandidateCard({ c, rank, reqs, selected, onSelect, onOpen, muted
 
           <div className="mt-4 grid gap-3 text-sm md:grid-cols-2">
             <div className="rounded-lg border border-sage-line bg-sage/40 p-3">
-              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-ok">{t("whyFits")}</div>
+              <div className="mb-1 text-xs font-semibold text-ok">{t("whyFits")}</div>
               <ul className="space-y-0.5 leading-relaxed">{c.strengths.map((x) => <li key={x}>{x}</li>)}</ul>
             </div>
             <div className="rounded-lg border border-orange/60 bg-bad-soft p-3">
-              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-bad">{t("risksGaps")}</div>
+              <div className="mb-1 text-xs font-semibold text-bad">{t("risksGaps")}</div>
               {c.gaps.length + c.risks.length === 0 ? <p className="text-muted">{t("noRisks")}</p> : (
                 <ul className="space-y-0.5 leading-relaxed">
                   {c.gaps.map((x) => <li key={"g" + x} className="flex gap-1.5"><span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-orange" />{x}</li>)}
@@ -180,7 +180,7 @@ function ReserveLane({ rr, reqs, onOpen }: { rr: RoleResult; reqs: Requirement[]
       <button onClick={() => setOpen(!open)} className="flex w-full items-center gap-2 text-left">
         <span className="font-medium">{t("reserveTitle")}</span>
         <Pill>{rr.reserve.length}</Pill>
-        <ChevronDown size={16} className={`ml-auto text-muted transition ${open ? "rotate-180" : ""}`} />
+        <ChevronDown size={16} className={`ml-auto text-muted transition-[rotate] duration-150 ease-out ${open ? "rotate-180" : ""}`} />
       </button>
       <p className="mt-1 text-xs text-muted">{t("reserveHint")}</p>
       {open && (
