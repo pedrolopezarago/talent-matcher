@@ -14,3 +14,13 @@ __pycache__/
 video/assets/
 video/vo/
 video/film/
+
+# Local only — Claude setup, prep docs and video work
+CLAUDE.md
+.claude/
+claude-settings.json
+setup.sh
+SETUP.md
+loop-logbook.md
+pitch-and-demo-video.md
+video/
