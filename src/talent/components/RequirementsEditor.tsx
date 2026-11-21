@@ -19,9 +19,9 @@ export function RequirementsEditor({ brief, setBrief, onFind, loading }: {
           <h2 className="text-lg font-semibold">{t("requirementsTitle")}</h2>
           <p className="mt-1 max-w-2xl text-sm text-muted">{t("requirementsHint")}</p>
         </div>
-        <div className="flex items-center gap-2 text-sm text-muted">
-          <CalendarDays size={16} />
-          {brief.immediate || !brief.start_date ? t("immediate") : `${t("start")}: ${brief.start_date}`}
+        <div className="flex shrink-0 items-center gap-2 whitespace-nowrap pr-4 text-sm text-muted">
+          <CalendarDays size={16} className="shrink-0" />
+          {brief.immediate || !brief.start_date ? t("immediate") : `${t("start")}: ${displayStart(brief.start_date)}`}
         </div>
       </div>
 
@@ -78,22 +78,22 @@ function RoleCard({ role, update }: { role: Role; update: (fn: (r: Role) => Role
             key={q.id}
             title={q.source_quote ? `“${q.source_quote}”${q.implicit ? ` · ${t("implicit")}` : ""}` : undefined}
             className={`group inline-flex items-center gap-1 rounded-full border text-xs font-medium transition ${
-              q.must ? "border-ink bg-ink text-surface" : "border-line bg-surface text-ink"
+              q.must ? "border-brand/30 bg-brand/10 text-ink" : "border-line bg-surface text-ink"
             }`}
           >
             <Button variant="plain"
               onClick={() => setReqs((qs) => qs.map((x) => (x.id === q.id ? { ...x, must: !x.must } : x)))}
-              className="h-auto gap-1 rounded-full py-1 pl-3 pr-0 text-xs"
+              className="h-auto gap-1 rounded-full bg-transparent py-1 pl-3 pr-0 text-xs text-ink hover:bg-transparent"
             >
               {q.implicit && <Sparkle size={11} className="shrink-0" />}
               {q.value}{q.level ? ` ${q.level}` : ""}
-              <span className={`ml-1 text-[10px] ${q.must ? "text-surface/70" : "text-muted"}`}>
+              <span className={`ml-1 text-[10px] ${q.must ? "font-semibold text-brand-dark" : "text-muted"}`}>
                 {q.must ? t("must") : t("nice")}
               </span>
             </Button>
             <Button variant="plain"
               onClick={() => setReqs((qs) => qs.filter((x) => x.id !== q.id))}
-              className={`rounded-full p-1 pr-2 opacity-60 hover:opacity-100`}
+              className="rounded-full bg-transparent p-1 pr-2 text-ink opacity-70 hover:bg-transparent hover:opacity-100"
               aria-label="remove"
             >
               <X size={12} />
@@ -112,4 +112,13 @@ function RoleCard({ role, update }: { role: Role; update: (fn: (r: Role) => Role
       </div>
     </div>
   );
+}
+
+/** Display-only: shows the brief's start month/day in the current year when the stored year is in the past. */
+function displayStart(raw: string): string {
+  const now = new Date();
+  const m = /^(\d{4})(-\d{2}(?:-\d{2})?)?/.exec(raw);
+  if (!m) return raw;
+  const year = Number(m[1]);
+  return year < now.getFullYear() ? `${now.getFullYear()}${m[2] ?? ""}` : raw;
 }
