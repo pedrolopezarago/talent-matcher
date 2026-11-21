@@ -35,6 +35,10 @@ class LLMError(Exception):
     pass
 
 
+class BudgetExceeded(LLMError):
+    """MAX_USD_PER_REQUEST reached; the call was not made."""
+
+
 class UsageTally:
     def __init__(self) -> None:
         self._lock = threading.Lock()
@@ -74,11 +78,20 @@ def _sem() -> asyncio.Semaphore:
 
 def strict_schema(schema: dict) -> dict:
     """Every object gets additionalProperties=false and all its properties required
-    (what structured outputs expect). Optional values are expressed as nullable types."""
+    (what structured outputs expect). Nullable type arrays (["string","null"]) become the documented
+    anyOf form."""
     s = copy.deepcopy(schema)
 
     def walk(node):
         if isinstance(node, dict):
+            t = node.get("type")
+            if isinstance(t, list) and "null" in t:
+                base = [x for x in t if x != "null"][0]
+                inner = {"type": base}
+                if "enum" in node:
+                    inner["enum"] = [v for v in node.pop("enum") if v is not None]
+                node.pop("type")
+                node["anyOf"] = [inner, {"type": "null"}]
             if node.get("type") == "object" and "properties" in node:
                 node["additionalProperties"] = False
                 node["required"] = list(node["properties"].keys())
@@ -143,14 +156,20 @@ async def _call_fake(task: Task, system: str, user: str, schema: dict, max_token
     fn = fake_responses.get(task)
     if fn is None:
         raise LLMError(f"no fake response registered for task {task!r}")
-    return fn(user)
+    out = fn(user)
+    if asyncio.iscoroutine(out):
+        out = await out
+    return out
 
 
 _PROVIDERS = {"anthropic": _call_anthropic, "openai_compat": _call_openai_compat, "fake": _call_fake}
 
 
-async def complete_json(task: Task, system: str, user: str, schema: dict, max_tokens: int = 4096) -> dict:
-    """One structured-output call. Retries once on any failure, then raises LLMError."""
+async def complete_json(task: Task, system: str, user: str, schema: dict, max_tokens: int = 4096,
+                        budgeted: bool = False) -> dict:
+    """One structured-output call. Retries once on any failure, then raises LLMError.
+    budgeted=True: refuse (BudgetExceeded) if the request has already spent MAX_USD_PER_REQUEST. The check
+    runs after the concurrency slot is acquired, i.e. when the call would really start."""
     provider = _PROVIDERS.get(settings.llm_provider)
     if provider is None:
         raise LLMError(f"unknown LLM_PROVIDER {settings.llm_provider!r}")
@@ -158,10 +177,14 @@ async def complete_json(task: Task, system: str, user: str, schema: dict, max_to
     for _ in range(2):
         try:
             async with _sem():
+                if budgeted and usage.usd() > settings.max_usd_per_request:
+                    raise BudgetExceeded(f"cost cap ${settings.max_usd_per_request} reached")
                 out = await provider(task, system, user, schema, max_tokens)
             if isinstance(out, dict):
                 return out
             last = LLMError(f"output is {type(out).__name__}, not an object")
+        except BudgetExceeded:
+            raise
         except Exception as e:  # noqa: BLE001 — any provider failure is retried once, then surfaced
             last = e
         log.warning("llm %s attempt failed: %s", task, last)

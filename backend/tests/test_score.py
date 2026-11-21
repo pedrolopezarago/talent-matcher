@@ -59,3 +59,9 @@ def test_different_area_requires_coverage():
     assert hidden_flags(r, [cov("q1", "met"), cov("q2", "missing")], p, "Software Engineering").different_area is False
     assert hidden_flags(r, [cov("q1", "met"), cov("q2", "met")], p, "Software Engineering").different_area is True
     assert hidden_flags(r, [cov("q1", "met"), cov("q2", "met")], profile(area="Software Engineering"), "Software Engineering").different_area is False
+
+
+def test_no_bridge_for_non_skill_requirement():
+    r = role([req("q1", type="other", value="regulated clients")])
+    h = hidden_flags(r, [cov("q1", "met", value="Banca y Finanzas", path="sector_principal")], profile(), modal_area=None)
+    assert h.vocab_bridges == []

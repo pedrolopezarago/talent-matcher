@@ -2,8 +2,7 @@
 import asyncio
 import logging
 
-from backend.app.config import settings
-from backend.app.llm import LLMError, complete_json, usage
+from backend.app.llm import LLMError, complete_json
 from backend.app.models import Role
 from backend.app.profile_view import compact_card
 
@@ -44,14 +43,10 @@ async def screen(role: Role, profiles: list[dict], top_n: int) -> tuple[list[str
 
     async def run(batch):
         nonlocal failed
-        if usage.usd() > settings.max_usd_per_request:
-            log.warning("screen: cost cap reached, skipping batch")
-            failed += 1
-            return
         ids = {p["employee_id"] for p in batch}
         user = "Candidates:\n" + "\n".join(compact_card(p) for p in batch)
         try:
-            out = await complete_json("screen", system, user, SCHEMA, max_tokens=4000)
+            out = await complete_json("screen", system, user, SCHEMA, max_tokens=4000, budgeted=True)
         except LLMError as e:
             log.warning("screen batch failed: %s", e)
             failed += 1
@@ -65,6 +60,10 @@ async def screen(role: Role, profiles: list[dict], top_n: int) -> tuple[list[str
                     continue
 
     await asyncio.gather(*(run(b) for b in batches))
+    if batches and not scores and failed == len(batches):
+        raise LLMError(f"all {failed} screening batches failed")
+    if failed:
+        log.warning("screen: %d/%d batches failed or skipped by the cost cap", failed, len(batches))
     # Ties keep retrieval order (the keyword/vector rank).
     ranked = sorted(scores, key=lambda e: (-scores[e], order[e]))
     return ranked[:top_n], failed

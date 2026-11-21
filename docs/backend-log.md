@@ -57,3 +57,11 @@ Running log of what the backend team did and why. Newest at the bottom.
 - Greedy baseline: most critical role first, best free candidate each time. Score = Σ fit·criticality / Σ criticality over all slots (empty slot = 0).
 - Swaps = people that differ per role; one-sentence explanation from the LLM (Haiku, numbers only) with a template fallback. Joint coverage = which team members cover each must requirement.
 - Team composition note from Dani (for later): real staffing usually means one expert + more junior profiles; for now the builder picks the best fit per slot.
+
+### Final review fixes
+- LLM fully down (every screening or judging batch fails) → `/api/match` returns 502, not an empty 200.
+- Cost cap now checked when a call actually starts (after taking a concurrency slot), for screening and judging; over-cap calls are skipped, not retried.
+- Evidence must come from a field that can prove the requirement type (e.g. a language can't prove a Kubernetes requirement); vocabulary bridges only for skill/certification/methodology requirements.
+- Nullable schema fields sent as the documented `anyOf [.., null]` form.
+- Reserve lane is computed even when nobody passes the filters (that's when it matters most).
+- `usage` is a process-wide tally reset per request: fine for a single-user demo; concurrent requests would share the cost cap.

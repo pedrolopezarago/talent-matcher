@@ -39,3 +39,20 @@ def test_missing_req_filled_and_unknown_req_dropped():
 def test_missing_status_keeps_no_evidence():
     cov, _, _, _ = ground(raw([{"req_id": "r1-q2", "status": "missing", "evidence": [{"path": "skills[0]"}]}]), P, R)
     assert {x.req_id: x for x in cov}["r1-q2"].evidence == []
+
+
+def test_evidence_from_irrelevant_field_dropped():
+    cov, _, _, dropped = ground(raw([{"req_id": "r1-q2", "status": "met", "evidence": [{"path": "idiomas[0]"}]}]), P, R)
+    assert {x.req_id: x for x in cov}["r1-q2"].status == "missing" and dropped == 1
+
+
+def test_skill_evidence_from_project_tech_kept():
+    cov, _, _, _ = ground(raw([{"req_id": "r1-q2", "status": "met", "evidence": [{"path": "proyectos[0].tecnologias[1]"}]}]), P, R)
+    assert {x.req_id: x for x in cov}["r1-q2"].evidence[0].value == "Kubernetes"
+
+
+def test_language_evidence_must_be_language():
+    r = role([req("r1-q1", type="language", value="Inglés")])
+    ok, _, _, _ = ground(raw([{"req_id": "r1-q1", "status": "met", "evidence": [{"path": "idiomas[0]"}]}]), P, r)
+    bad, _, _, _ = ground(raw([{"req_id": "r1-q1", "status": "met", "evidence": [{"path": "skills[0]"}]}]), P, r)
+    assert ok[0].status == "met" and bad[0].status == "missing"

@@ -46,3 +46,12 @@ async def test_judge_drops_candidates_not_in_batch():
     llm.fake_responses["judge"] = lambda u: {"candidates": _ok(u)["candidates"] + [{"employee_id": "NTT9999999", "coverage": [], "strengths": [], "gaps": [], "risks": []}]}
     out, _ = await judge(R, [profile("NTT0000001")], "en")
     assert [o["employee_id"] for o in out] == ["NTT0000001"]
+
+
+async def test_judge_all_batches_failed_raises():
+    def boom(u):
+        raise RuntimeError("down")
+
+    llm.fake_responses["judge"] = boom
+    with pytest.raises(llm.LLMError):
+        await judge(R, [profile("NTT0000001")], "en")

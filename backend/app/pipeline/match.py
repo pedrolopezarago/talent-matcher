@@ -57,29 +57,24 @@ async def _match_role(role: Role, allowed: list[str], roll_off_risk: bool, rule:
     where, params = build_where(role, allowed)
     total = await asyncio.to_thread(total_profiles)
     after = await asyncio.to_thread(count, where, params)
-    empty = RoleResult(role_id=role.id, availability_rule=rule,
-                       funnel=Funnel(total=total, after_filters=after, reviewed=0, ranked=0), candidates=[], reserve=[])
-    if after == 0:
-        return empty, 0, 0
+    modal = _modal_area(role.title)
 
-    depth = max(100, min(role.review_depth, settings.screen_max_per_role))
-    hits = await asyncio.to_thread(keyword_retrieve, role, where, params, depth)
-    # Reserve lane: same role, people currently assigned (would need release).
+    # Reserve lane first: people currently assigned (would need release). Shown even when nobody is available.
     r_where, r_params = build_where(role, [ASIGNADO])
     reserve_hits = await asyncio.to_thread(keyword_retrieve, role, r_where, r_params, RESERVE_SIZE)
+    hits = []
+    if after > 0:
+        depth = max(100, min(role.review_depth, settings.screen_max_per_role))
+        hits = await asyncio.to_thread(keyword_retrieve, role, where, params, depth)
     sims = dict(hits) | dict(reserve_hits)
     profiles = await asyncio.to_thread(get_profiles, [i for i, _ in hits] + [i for i, _ in reserve_hits])
     pool = [profiles[i] for i, _ in hits if i in profiles]
-    if not pool:
-        empty.funnel.reviewed = 0
-        return empty, 0, 0
-
-    top_ids, failed = await screen(role, pool, settings.judge_top_n)
-    if failed:
-        log.warning("role %s: %d screening batches failed", role.id, failed)
-    modal = _modal_area(role.title)
-    shortlisted = [profiles[i] for i in top_ids]
     reserve_profiles = [profiles[i] for i, _ in reserve_hits if i in profiles]
+
+    shortlisted: list[dict] = []
+    if pool:
+        top_ids, _failed = await screen(role, pool, settings.judge_top_n)
+        shortlisted = [profiles[i] for i in top_ids]
     (cands, c1, d1), (reserve, c2, d2) = await asyncio.gather(
         _assess(role, shortlisted, sims, lang, roll_off_risk, modal),
         _assess(role, reserve_profiles, sims, lang, False, modal),

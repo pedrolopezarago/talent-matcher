@@ -6,6 +6,7 @@ from backend.app.profile_view import resolve_path
 
 CREDIT = {"met": 1.0, "partial": 0.5, "missing": 0.0}
 MUST_MISSING_CAP = 69
+BRIDGE_TYPES = {"skill", "certification", "methodology"}
 
 
 def _skill_for(req, cov: Coverage, profile: dict) -> dict | None:
@@ -64,7 +65,8 @@ def hidden_flags(role: Role, coverage: list[Coverage], profile: dict, modal_area
     by_req = {c.req_id: c for c in coverage}
     for r in role.requirements:
         c = by_req.get(r.id)
-        if not c or c.status != "met" or not c.evidence:
+        # Bridges are about skills described with other words; other requirement types don't qualify.
+        if r.type not in BRIDGE_TYPES or not c or c.status != "met" or not c.evidence:
             continue
         term = r.value.lower()
         if not any(term in e.value.lower() for e in c.evidence):

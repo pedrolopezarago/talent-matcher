@@ -49,3 +49,12 @@ def test_strict_schema_adds_required_and_no_extra():
     s = llm.strict_schema({"type": "object", "properties": {"a": {"type": "object", "properties": {"b": {"type": "string"}}}}})
     assert s["additionalProperties"] is False and s["required"] == ["a"]
     assert s["properties"]["a"]["additionalProperties"] is False
+
+
+def test_strict_schema_nullable_becomes_anyof():
+    s = llm.strict_schema({"type": "object", "properties": {
+        "a": {"type": ["string", "null"], "description": "d"},
+        "b": {"type": ["string", "null"], "enum": ["X", "Y", None]},
+    }})
+    assert s["properties"]["a"] == {"anyOf": [{"type": "string"}, {"type": "null"}], "description": "d"}
+    assert s["properties"]["b"] == {"anyOf": [{"type": "string", "enum": ["X", "Y"]}, {"type": "null"}]}

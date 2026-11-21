@@ -88,3 +88,27 @@ def test_match_route():
     r = TestClient(app).post("/api/match", json={"brief": BRIEF1.model_dump(), "lang": "es"})
     assert r.status_code == 200
     assert r.json()["retrieval"] == "keyword"
+
+
+@needs_db
+async def test_reserve_shown_even_when_nobody_available():
+    from backend.app.pipeline.match import match
+
+    b = brief([role([req("r1-q1", type="language", value="Gallego", level="Nativo")], min_years=30)])
+    res = await match(b, "en", today=date(2026, 11, 21))
+    rr = res.roles[0]
+    assert rr.funnel.after_filters == 0 and rr.candidates == []
+    assert 0 < len(rr.reserve) <= 5 and all(c.availability == "Asignado" for c in rr.reserve)
+
+
+@needs_db
+def test_match_route_502_when_llm_down():
+    from backend.app.main import app
+
+    def boom(u):
+        raise RuntimeError("down")
+
+    llm.fake_responses["screen"] = boom
+    llm.fake_responses["judge"] = boom
+    r = TestClient(app).post("/api/match", json={"brief": BRIEF1.model_dump()})
+    assert r.status_code == 502

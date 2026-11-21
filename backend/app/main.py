@@ -44,7 +44,10 @@ async def parse_route(body: ParseRequest):
 @app.post("/api/match", response_model=MatchResult)
 async def match_route(body: MatchRequest):
     usage.reset()
-    result = await match(body.brief, body.lang)
+    try:
+        result = await match(body.brief, body.lang)
+    except LLMError as e:
+        raise HTTPException(status_code=502, detail=f"LLM failed: {e}") from e
     log.info("match: %d roles, %d LLM calls, $%.4f", len(result.roles), usage.calls, usage.usd())
     return result
 
