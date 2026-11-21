@@ -24,7 +24,7 @@ export function TeamView({ brief, team, onBack }: { brief: Brief; team: TeamResu
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {team.optimal.map((s) => (
-            <div key={`${s.role_id}-${s.slot}`} className={`flex items-center gap-3 rounded-xl border p-3 ${swappedIn.has(s.name) ? "border-hidden/40 bg-hidden-soft/40" : "border-line"}`}>
+            <div key={`${s.role_id}-${s.slot}`} className={`flex items-center gap-3 rounded-2xl border p-3 ${swappedIn.has(s.name) ? "border-hidden/40 bg-hidden-soft/40" : "border-line"}`}>
               <FitRing fit={s.fit} size={48} />
               <div className="min-w-0">
                 <div className="text-xs text-muted">{title(s.role_id)}{brief.roles.find((r) => r.id === s.role_id)?.headcount! > 1 ? ` · ${t("slot")} ${s.slot}` : ""}</div>
@@ -48,7 +48,7 @@ export function TeamView({ brief, team, onBack }: { brief: Brief; team: TeamResu
               </li>
             ))}
           </ul>
-          <p className="mt-4 rounded-xl bg-canvas p-3 text-sm leading-relaxed">{team.explanation}</p>
+          <p className="mt-4 rounded-2xl bg-canvas p-3 text-sm leading-relaxed">{team.explanation}</p>
         </Card>
       )}
 

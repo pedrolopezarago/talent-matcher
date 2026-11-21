@@ -17,7 +17,7 @@ export function EvidenceDrawer({ c, reqs, onClose }: { c: Candidate; reqs: Requi
   return (
     <div className="fixed inset-0 z-40 flex justify-end">
       <div className="absolute inset-0 bg-brand/30 backdrop-blur-[2px]" onClick={onClose} />
-      <aside className="relative h-full w-full max-w-lg overflow-y-auto overscroll-contain bg-surface shadow-2xl motion-safe:animate-[slide_220ms_cubic-bezier(0.2,0,0,1)_both] motion-reduce:animate-[fade_220ms_ease-out_both]">
+      <aside className="relative h-full w-full max-w-lg overflow-y-auto bg-surface shadow-soft animate-[slide_220ms_cubic-bezier(.2,.8,.2,1)]">
         <div className="sticky top-0 z-10 flex items-center gap-4 border-b border-line bg-surface/95 px-6 py-4 backdrop-blur">
           <FitRing fit={c.fit} size={48} />
           <div className="min-w-0 flex-1">
@@ -42,7 +42,7 @@ export function EvidenceDrawer({ c, reqs, onClose }: { c: Candidate; reqs: Requi
               {c.coverage.map((cv) => {
                 const r = reqs.find((x) => x.id === cv.req_id);
                 return (
-                  <div key={cv.req_id} className="rounded-xl border border-line p-3">
+                  <div key={cv.req_id} className="rounded-2xl border border-line p-3">
                     <div className="flex items-center gap-2 text-sm">
                       <StatusIcon status={cv.status} />
                       <span className="font-medium">{r?.value ?? cv.req_id}</span>
