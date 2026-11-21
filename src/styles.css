@@ -30,6 +30,35 @@
  */
 
 @theme inline {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "League Spartan", system-ui, sans-serif;
+  --color-support: var(--support);
+  --color-support-dark: var(--support-dark);
+  --color-support-soft: var(--support-soft);
+  --color-overlay: var(--overlay);
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-soft: var(--brand-soft);
+  --color-ink: var(--ink);
+  --color-line: var(--line);
+  --color-canvas: var(--canvas);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-hidden: var(--hidden);
+  --color-hidden-soft: var(--hidden-soft);
+  --color-surface: var(--surface);
+  --color-on-brand: var(--on-brand);
+  --color-sage: var(--sage);
+  --color-sage-line: var(--sage-line);
+  --color-cream: var(--cream);
+  --color-peach: var(--peach);
+  --color-orange: var(--orange);
+  --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.04);
+  --color-amber: oklch(0.77 0.16 75);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -47,7 +76,7 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
+  --color-muted: var(--muted-text);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
@@ -73,14 +102,40 @@
 }
 
 :root {
+  --support: oklch(0.65377 0.109795 206.03);
+  --support-dark: oklch(0.529679 0.088878 207.052);
+  --support-soft: oklch(0.65377 0.109795 206.03 / 0.1);
+  --overlay: oklch(0.22 0.003 286 / 0.32);
   --radius: 0.625rem;
+  --brand: oklch(0.69583 0.204259 44.479);
+  --brand-dark: oklch(0.62 0.2 42);
+  --brand-soft: oklch(0 0 0 / 0.04);
+  --ink: oklch(0.22 0.003 286);
+  --muted-text: oklch(0.53 0.008 286);
+  --line: oklch(0 0 0 / 0.06);
+  --canvas: oklch(0.982 0.002 248);
+  --ok: oklch(0.62 0.13 150);
+  --ok-soft: oklch(0.95 0.04 150);
+  --warn: oklch(0.53 0.008 286);
+  --warn-soft: oklch(0.86 0.09 50);
+  --bad: oklch(0.52 0.15 27);
+  --bad-soft: oklch(0.94 0.04 60);
+  --hidden: oklch(0.45 0.08 85);
+  --hidden-soft: oklch(0.91 0.07 95);
+  --surface: oklch(1 0 0);
+  --on-brand: oklch(1 0 0);
+  --sage: oklch(0 0 0 / 0.04);
+  --sage-line: oklch(0 0 0 / 0.06);
+  --cream: oklch(0.91 0.07 95);
+  --peach: oklch(0.78 0.12 50);
+  --orange: oklch(0.69 0.21 44);
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
+  --primary: oklch(0.69 0.21 44);
   --primary-foreground: oklch(0.984 0.003 247.858);
   --secondary: oklch(0.968 0.007 247.896);
   --secondary-foreground: oklch(0.208 0.042 265.755);
@@ -90,7 +145,7 @@
   --accent-foreground: oklch(0.208 0.042 265.755);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
+  --border: oklch(0 0 0 / 0.06);
   --input: oklch(0.929 0.013 255.508);
   --ring: oklch(0.704 0.04 256.788);
   --chart-1: oklch(0.646 0.222 41.116);
@@ -109,6 +164,10 @@
 }
 
 .dark {
+  --support: oklch(0.65377 0.109795 206.03);
+  --support-dark: oklch(0.8 0.08 207);
+  --support-soft: oklch(0.65377 0.109795 206.03 / 0.15);
+  --overlay: oklch(0 0 0 / 0.6);
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
   --card: oklch(0.208 0.042 265.755);
@@ -148,8 +207,14 @@
     border-color: var(--color-border);
   }
 
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+  html, body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
   }
+  body { font-family: var(--font-sans); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); line-height: 1.2; }
+  * { letter-spacing: 0; }
 }
+
+@keyframes slide { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }

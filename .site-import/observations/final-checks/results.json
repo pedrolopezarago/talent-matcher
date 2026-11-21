@@ -1,0 +1,62 @@
+[
+  {
+    "viewport": "desktop",
+    "check": "availability filter",
+    "passed": true,
+    "observed": "Marco matches=0"
+  },
+  {
+    "viewport": "desktop",
+    "check": "minimum years filter",
+    "passed": true,
+    "observed": "Elena matches=0"
+  },
+  {
+    "viewport": "desktop",
+    "check": "CSV export",
+    "passed": true,
+    "observed": "equipo.csv, 4 rows"
+  },
+  {
+    "viewport": "desktop",
+    "check": "Spanish formation suggestions",
+    "passed": true,
+    "observed": "matches=1"
+  },
+  {
+    "viewport": "desktop",
+    "check": "runtime errors",
+    "passed": true,
+    "observed": []
+  },
+  {
+    "viewport": "phone",
+    "check": "availability filter",
+    "passed": true,
+    "observed": "Marco matches=0"
+  },
+  {
+    "viewport": "phone",
+    "check": "minimum years filter",
+    "passed": true,
+    "observed": "Elena matches=0"
+  },
+  {
+    "viewport": "phone",
+    "check": "CSV export",
+    "passed": true,
+    "observed": "equipo.csv, 4 rows"
+  },
+  {
+    "viewport": "phone",
+    "check": "Spanish formation suggestions",
+    "passed": true,
+    "observed": "matches=1"
+  },
+  {
+    "viewport": "phone",
+    "check": "runtime errors",
+    "passed": true,
+    "observed": []
+  }
+]

@@ -1,0 +1,79 @@
+[
+  {
+    "capability": "TalentIn search and demo frontend",
+    "source": "GitHub src/talent and published / and /demo pages",
+    "outcome": "migrate",
+    "status": "verified",
+    "next_action": "None."
+  },
+  {
+    "capability": "Seeded brief, match, and team records",
+    "source": "src/talent/mocks/brief.json, match.json, team.json",
+    "outcome": "migrate",
+    "status": "verified",
+    "next_action": "None."
+  },
+  {
+    "capability": "English and Spanish interface, requirement editing, filters, evidence drawer, comparison, team optimisation view, gaps, CSV export",
+    "source": "GitHub frontend components",
+    "outcome": "migrate",
+    "status": "verified",
+    "next_action": "None."
+  },
+  {
+    "capability": "Live brief parsing, profile matching, and team explanation API",
+    "source": "FastAPI backend with Anthropic or OpenAI-compatible providers",
+    "outcome": "preserve_external",
+    "status": "pending_configuration",
+    "next_action": "Deploy the Python service separately and configure VITE_API_URL; the imported app uses its seeded data until then."
+  },
+  {
+    "capability": "190,000 synthetic employee profiles and Postgres schema",
+    "source": "External profiles.parquet and Postgres/pgvector; neither data file nor record export is in GitHub",
+    "outcome": "migrate",
+    "status": "pending_source_data",
+    "next_action": "Request the profile export or a deployed matching-service URL after the frontend preview."
+  },
+  {
+    "capability": "Authentication and user profiles",
+    "source": "Explicitly absent from the source application",
+    "outcome": "not_applicable",
+    "status": "confirmed_absent",
+    "next_action": "None."
+  },
+  {
+    "capability": "Public API endpoints /api/brief/parse, /api/match, /api/team, /api/profile/:id, /api/health",
+    "source": "backend/app/main.py",
+    "outcome": "preserve_external",
+    "status": "pending_configuration",
+    "next_action": "Keep the existing external API integration; live verification requires the deployed service and provider credentials."
+  },
+  {
+    "capability": "Uploaded files, payments, email, analytics, schedules, and webhooks",
+    "source": "Repository inspection",
+    "outcome": "not_applicable",
+    "status": "confirmed_absent",
+    "next_action": "None."
+  },
+  {
+    "capability": "Formation suggestions",
+    "source": "Existing TeamResult.training API plus new team-view presentation and seeded Kafka gaps",
+    "outcome": "migrate_and_complete",
+    "status": "verified",
+    "next_action": "None."
+  },
+  {
+    "capability": "TalentIn uploaded title logo and favicon",
+    "source": "user-uploads://logo_talentin.jpeg",
+    "outcome": "migrate",
+    "status": "verified",
+    "next_action": "None."
+  },
+  {
+    "capability": "Build, TypeScript, routing, state, desktop and phone interaction verification",
+    "source": "Local preview and Vitest",
+    "outcome": "verify",
+    "status": "verified",
+    "next_action": "8 tests passed; CSV export, filters, evidence, comparison, team, gaps, language, reset, and formation checks passed."
+  }
+]
