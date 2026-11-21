@@ -54,7 +54,7 @@ export function EvidenceDrawer({ c, reqs, onClose }: { c: Candidate; reqs: Requi
                       <ul className="mt-2 space-y-1">
                         {cv.evidence.map((e) => (
                           <li key={e.path} className="flex items-start gap-2 rounded-lg bg-brand-soft/60 px-2.5 py-1.5 text-[13px]">
-                            <Quote size={12} className="mt-0.5 shrink-0 text-support-dark" />
+                            <Quote size={12} className="mt-0.5 shrink-0 text-brand" />
                             <span className="flex-1">{e.value}</span>
                             <code className="shrink-0 text-[11px] text-muted">{e.path}</code>
                           </li>

@@ -109,12 +109,12 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
       <header className="sticky top-0 z-20 border-b border-line bg-surface/75 backdrop-blur-xl">
         <div className="mx-auto flex h-12 max-w-6xl items-center gap-3 px-4 sm:px-6">
           <div className="flex min-w-0 items-center gap-2 font-display text-sm font-semibold">
-            <UsersRound size={16} className="text-support-dark" /><span className="hidden truncate sm:inline">Talent Matcher</span>
+            <UsersRound size={16} className="text-brand" /><span className="hidden truncate sm:inline">Talent Matcher</span>
           </div>
           <nav className="mx-auto flex rounded-lg bg-brand-soft p-1">
             {([["match", lang === "es" ? "Búsqueda" : "Search"], ["team", lang === "es" ? "Equipo" : "Team"], ["gaps", lang === "es" ? "Brechas" : "Gaps"]] as const).map(([k, label]) => (
               <Button variant="plain" key={k} onClick={() => goView(k)} disabled={k !== "match" && !result}
-                className={`rounded-md px-3 py-1 text-xs font-medium transition disabled:opacity-40 sm:px-4 ${view === k ? "bg-surface text-support-dark shadow-soft" : "text-muted hover:text-ink"}`}>
+                className={`rounded-md px-3 py-1 text-xs font-medium transition disabled:opacity-40 sm:px-4 ${view === k ? "bg-surface text-ink shadow-soft" : "text-muted hover:text-ink"}`}>
                 {label}
               </Button>
             ))}
@@ -136,7 +136,7 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
       <main className="mx-auto max-w-5xl space-y-8 px-4 py-6 pb-28 sm:px-6 sm:py-8">
         <div className="pt-4">
           <h1 className="text-4xl font-semibold text-ink">Internal Talent Matcher</h1>
-          <p className="mt-1 text-[15px] text-muted">{t("tagline")}{api.usingMocks && <span className="ml-2 text-xs font-medium text-support-dark">· {t("mockNote")}</span>}</p>
+          <p className="mt-1 text-[15px] text-muted">{t("tagline")}{api.usingMocks && <span className="ml-2 text-xs font-medium text-brand">· {t("mockNote")}</span>}</p>
         </div>
         <BriefInput text={text} setText={setText} onAnalyse={analyse} loading={loading === "parse"} filters={filters} setFilters={setFilters} showInput={!isDemo || !result} />
 
@@ -199,11 +199,11 @@ function GapView({ brief, team, es }: { brief: Brief; team: TeamResult; es: bool
         <div className="mt-4 h-2 overflow-hidden rounded-full bg-brand-soft"><div className="h-full rounded-full bg-orange" style={{ width: `${pct}%` }} /></div>
       </div>
       <div className="rounded-3xl bg-surface p-6 md:col-span-2">
-        <h3 className="font-semibold">{es ? "Requisitos sin cubrir" : "Uncovered requirements"} <span className="ml-1 rounded-full bg-support-soft px-2 py-0.5 text-xs text-support-dark">{gaps.length}</span></h3>
+        <h3 className="font-semibold">{es ? "Requisitos sin cubrir" : "Uncovered requirements"} <span className="ml-1 rounded-full bg-brand/10 px-2 py-0.5 text-xs text-brand-dark">{gaps.length}</span></h3>
         <div className="mt-4 flex flex-wrap gap-2">
           {gaps.length === 0 && <span className="text-sm text-muted">{es ? "El equipo cubre todos los requisitos." : "The team covers every requirement."}</span>}
           {gaps.map((q) => (
-            <span key={q.id} className={`rounded-full px-3 py-1.5 text-xs font-medium ${q.must ? "bg-support-soft text-support-dark" : "bg-brand-soft text-ink"}`}>{q.value}{q.must ? " · must" : ""}</span>
+            <span key={q.id} className={`rounded-full px-3 py-1.5 text-xs font-medium ${q.must ? "bg-brand/10 text-brand-dark" : "bg-brand-soft text-ink"}`}>{q.value}{q.must ? " · must" : ""}</span>
           ))}
         </div>
       </div>

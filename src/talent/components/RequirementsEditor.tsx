@@ -35,7 +35,7 @@ export function RequirementsEditor({ brief, setBrief, onFind, loading }: {
         <Button variant="plain"
           onClick={onFind}
           disabled={loading}
-          className="inline-flex items-center gap-2 rounded-2xl bg-support px-4 py-2.5 text-sm font-semibold text-on-brand transition hover:bg-support-dark active:scale-[0.98] disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-2xl bg-ink px-4 py-2.5 text-sm font-semibold text-surface transition hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
         >
           {loading ? <Spinner /> : <Search size={16} />}
           {loading ? t("matching") : t("findCandidates")}
@@ -78,7 +78,7 @@ function RoleCard({ role, update }: { role: Role; update: (fn: (r: Role) => Role
             key={q.id}
             title={q.source_quote ? `“${q.source_quote}”${q.implicit ? ` · ${t("implicit")}` : ""}` : undefined}
             className={`group inline-flex items-center gap-1 rounded-full border text-xs font-medium transition ${
-              q.must ? "border-support bg-support-soft text-support-dark" : "border-support/40 bg-surface text-support-dark"
+              q.must ? "border-ink bg-ink text-surface" : "border-line bg-surface text-ink"
             }`}
           >
             <Button variant="plain"
@@ -87,7 +87,7 @@ function RoleCard({ role, update }: { role: Role; update: (fn: (r: Role) => Role
             >
               {q.implicit && <Sparkle size={11} className="shrink-0" />}
               {q.value}{q.level ? ` ${q.level}` : ""}
-              <span className={`ml-1 text-[10px] ${q.must ? "text-support-dark/70" : "text-muted"}`}>
+              <span className={`ml-1 text-[10px] ${q.must ? "text-surface/70" : "text-muted"}`}>
                 {q.must ? t("must") : t("nice")}
               </span>
             </Button>
@@ -100,7 +100,7 @@ function RoleCard({ role, update }: { role: Role; update: (fn: (r: Role) => Role
             </Button>
           </span>
         ))}
-        <form onSubmit={(e) => { e.preventDefault(); add(); }} className="inline-flex items-center rounded-full border border-dashed border-line pl-2 focus-within:border-support">
+        <form onSubmit={(e) => { e.preventDefault(); add(); }} className="inline-flex items-center rounded-full border border-dashed border-line pl-2 focus-within:border-ink">
           <Plus size={12} className="text-muted" />
           <input
             value={draft}

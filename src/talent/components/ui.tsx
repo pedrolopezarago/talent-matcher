@@ -26,7 +26,7 @@ export function FitRing({ fit, size = 56 }: { fit: number; size?: number }) {
 
 const tones = {
   neutral: "bg-muted/10 text-ink border-line",
-  brand: "bg-support-soft text-support-dark border-transparent",
+  brand: "bg-brand/10 text-brand-dark border-transparent",
   ok: "bg-sage text-ok border-sage-line",
   warn: "bg-brand-soft text-ink border-transparent",
   bad: "bg-bad-soft text-bad border-transparent",

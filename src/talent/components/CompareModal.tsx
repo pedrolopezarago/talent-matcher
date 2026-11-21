@@ -40,7 +40,7 @@ export function CompareModal({ entries, onClose }: { entries: ProfileEntry[]; on
             <div className="space-y-6 sm:hidden">
               {entries.map(({ c, roleId, roleTitle, reqs }) => (
                 <section key={selectionKey(roleId, c.employee_id)} className="border-b border-line pb-6">
-                  <div className="mb-3 text-xs text-support-dark">{roleTitle}</div>
+                  <div className="mb-3 text-xs text-muted">{roleTitle}</div>
                   <div className="flex items-start gap-3">
                     <FitRing fit={c.fit} size={48} />
                     <div className="min-w-0"><h3 className="text-lg font-semibold">{c.name}</h3><p className="mt-1 text-xs text-muted">{c.seniority} · {c.availability}</p></div>
@@ -64,7 +64,7 @@ export function CompareModal({ entries, onClose }: { entries: ProfileEntry[]; on
                   <th className={`${cell} min-w-[160px] text-xs font-normal text-muted`}>{t("requirement")}</th>
                   {entries.map(({ c, roleId, roleTitle }) => (
                     <th key={selectionKey(roleId, c.employee_id)} className={cell}>
-                      <div className="mb-3 text-xs font-normal text-support-dark">{roleTitle}</div>
+                      <div className="mb-3 text-xs font-normal text-muted">{roleTitle}</div>
                       <div className="flex items-start gap-3">
                         <FitRing fit={c.fit} size={48} />
                         <div className="min-w-0">
@@ -80,7 +80,7 @@ export function CompareModal({ entries, onClose }: { entries: ProfileEntry[]; on
                 {rows.map(({ req, roleId, roleTitle }) => (
                   <tr key={selectionKey(roleId, req.id)}>
                     <td className={cell}>
-                      {roles.length > 1 && <div className="mb-1 font-display text-sm text-support-dark">{roleTitle}</div>}
+                      {roles.length > 1 && <div className="mb-1 font-display text-sm text-ink">{roleTitle}</div>}
                       <span className={req.must ? "font-bold" : "text-muted"}>{req.value}</span>
                       <div className="mt-1 text-xs text-muted">{req.must ? t("must") : t("nice")}</div>
                     </td>

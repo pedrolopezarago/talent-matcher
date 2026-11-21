@@ -37,7 +37,7 @@ export function BriefInput({ text, setText, onAnalyse, loading, filters, setFilt
           onChange={(e) => setText(e.target.value)}
           placeholder={t("briefPlaceholder")}
           rows={5}
-          className="w-full resize-y rounded-2xl border border-line bg-brand-soft p-4 text-[15px] leading-relaxed outline-none transition placeholder:text-muted focus:bg-surface focus:ring-4 focus:ring-support/15"
+          className="w-full resize-y rounded-2xl border border-line bg-brand-soft p-4 text-[15px] leading-relaxed outline-none transition placeholder:text-muted focus:bg-surface focus:ring-4 focus:ring-ink/10"
         />
       )}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -68,7 +68,7 @@ export function BriefInput({ text, setText, onAnalyse, loading, filters, setFilt
           <Button variant="plain"
             onClick={onAnalyse}
             disabled={!text.trim() || loading}
-            className="ml-auto inline-flex items-center gap-2 rounded-lg bg-support px-4 py-2 text-sm font-medium text-on-brand transition hover:bg-support-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+            className="ml-auto inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-medium text-on-brand transition hover:bg-brand-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
           >
             {loading ? <Spinner /> : <Search size={15} />}
             {loading ? t("analysing") : t("findTalent")}

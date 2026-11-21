@@ -71,7 +71,7 @@ export function CandidateCard({ c, rank, reqs, selected, onSelect, onOpen, muted
   return (
     <div className={`group -mx-3 grid gap-4 rounded-xl border-b border-line px-3 py-5 transition hover:bg-brand-soft/50 md:grid-cols-[220px_1fr_180px] ${selected ? "bg-support-soft" : ""} ${muted ? "opacity-75" : ""}`}>
       <div className="min-w-0">
-        <Button variant="plain" onClick={onOpen} className="h-auto max-w-full justify-start p-0 text-left font-display text-lg font-semibold hover:text-support-dark">
+        <Button variant="plain" onClick={onOpen} className="h-auto max-w-full justify-start p-0 text-left font-display text-lg font-semibold hover:text-brand">
           <span className="text-xs font-normal tabular-nums text-muted">{rank}.</span> {c.name}
           <ArrowUpRight size={13} className="opacity-0 transition group-hover:opacity-60" />
         </Button>
@@ -139,7 +139,7 @@ function Kpis({ brief, result }: { brief: Brief; result: MatchResult }) {
         <div className="text-sm text-muted">{es ? "Cobertura del equipo" : "Team coverage"}</div>
         <div className="mt-2 flex flex-wrap items-end gap-3">
           <span className="text-4xl font-semibold tabular-nums font-display text-brand">{coverage}%</span>
-          <span className={`mb-1 rounded-full px-3 py-1 text-xs font-semibold ${complete ? "bg-support-soft text-support-dark" : "bg-brand-soft text-muted"}`}>
+          <span className={`mb-1 rounded-full px-3 py-1 text-xs font-semibold ${complete ? "bg-brand/10 text-brand-dark" : "bg-brand-soft text-muted"}`}>
             {complete ? (es ? "Equipo completo sin duplicados" : "Full team, no duplicates") : (es ? `${picks.length}/${slots} puestos cubiertos` : `${picks.length}/${slots} slots filled`)}
           </span>
         </div>
@@ -153,7 +153,7 @@ function Kpis({ brief, result }: { brief: Brief; result: MatchResult }) {
           </div>
           <div className="flex h-12 items-end gap-1.5">
             {bars.map((b) => (
-              <div key={b.label} title={`${b.label}: ${b.n}`} className={`w-5 rounded-full ${b.hi ? "bg-support" : "bg-brand-soft"}`} style={{ height: `${Math.max(12, (b.n / max) * 100)}%` }} />
+              <div key={b.label} title={`${b.label}: ${b.n}`} className={`w-5 rounded-full ${b.hi ? "bg-brand" : "bg-brand-soft"}`} style={{ height: `${Math.max(12, (b.n / max) * 100)}%` }} />
             ))}
           </div>
         </div>
