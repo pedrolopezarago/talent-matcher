@@ -13,6 +13,7 @@ export function TeamView({ brief, match, team, onBack }: { brief: Brief; match: 
   const nameOf = (id: string) => team.optimal.find((s) => s.employee_id === id)?.name ?? team.greedy.find((s) => s.employee_id === id)?.name ?? id;
   const swappedIn = new Set(team.swaps.map((s) => s.optimal));
   const risks = analyseTeamRisks(brief, match, team);
+  const hasCriticalRisks = risks.some((risk) => risk.severity === "critical");
 
   return (
     <div className="space-y-4">
@@ -44,7 +45,7 @@ export function TeamView({ brief, match, team, onBack }: { brief: Brief; match: 
         <div className="flex items-start justify-between gap-4">
           <div>
             <h3 id="team-risk-title" className="flex items-center gap-2 font-semibold">
-              {risks.length > 0 ? <ShieldAlert size={19} className="text-brand" /> : <ShieldCheck size={19} className="text-ok" />}
+              {hasCriticalRisks ? <ShieldAlert size={19} className="text-brand" /> : <ShieldCheck size={19} className="text-ok" />}
               {t("teamRisksTitle")}
             </h3>
             <p className="mt-1 text-sm text-muted">{t("teamRisksHint")}</p>
@@ -52,12 +53,14 @@ export function TeamView({ brief, match, team, onBack }: { brief: Brief; match: 
           {risks.length > 0 && <span className="rounded-full bg-brand-soft px-2.5 py-1 text-xs font-medium text-brand-dark">{risks.length}</span>}
         </div>
 
-        {risks.length === 0 ? (
+        {!hasCriticalRisks && (
           <div className="mt-5 rounded-xl border border-ok/20 bg-ok-soft p-4">
             <div className="flex items-center gap-2 font-display font-semibold text-ok"><ShieldCheck size={18} />{t("noCriticalRisks")}</div>
             <p className="mt-1 text-sm text-muted">{t("noCriticalRisksHint")}</p>
           </div>
-        ) : (
+        )}
+
+        {risks.length > 0 && (
           <ul className="mt-5 grid gap-3 lg:grid-cols-2">
             {risks.map((risk) => {
               const critical = risk.severity === "critical";

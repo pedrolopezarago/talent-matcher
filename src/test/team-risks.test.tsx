@@ -95,6 +95,19 @@ describe("Team weakness and risk analysis", () => {
     expect(screen.getByText("No critical gaps detected")).toBeInTheDocument();
   });
 
+  it("shows a positive state alongside minor improvements when no critical risk remains", () => {
+    const niceBrief: Brief = {
+      ...brief,
+      roles: brief.roles.map((role) => role.id === "r2" ? {
+        ...role,
+        requirements: role.requirements.map((requirement) => requirement.value === "Kafka" ? { ...requirement, must: false } : requirement),
+      } : role),
+    };
+    render(<TeamView brief={niceBrief} match={match} team={team} onBack={() => {}} />);
+    expect(screen.getByText("No critical gaps detected")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Suggest reinforcement: Kafka" })).toBeInTheDocument();
+  });
+
   it("returns to candidates from a risk recommendation without changing the team", () => {
     const onBack = vi.fn();
     render(<TeamView brief={brief} match={match} team={team} onBack={onBack} />);
