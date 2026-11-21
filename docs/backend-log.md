@@ -36,3 +36,7 @@ Running log of what the backend team did and why. Newest at the bottom.
 ### Task 6 — profile views + screening
 - `profile_view.py`: compact card (~150 tokens) for screening, judge view (stored keys so paths resolve), `resolve_path` (never raises, only whitelisted roots — `email` can't be cited) and `render` (display values in the formats of `docs/data-schema.md`). Email never goes to the LLM.
 - Screening: batches of 50 cards, parallel (semaphore `MAX_LLM_CONCURRENCY`), score 0–10 + short reason; unknown ids ignored; failed batches counted and skipped; stops launching batches once the per-request cost cap is hit. Ties keep retrieval order.
+
+### Task 7 — judging + grounding
+- Judging: batches of 10 compact-JSON profiles, per requirement `met|partial|missing` + evidence **paths only**, plus strengths (with paths), gaps, risks in the requested language. Prompt rewards skills evidenced in projects/experience and flags "low level despite years" and "only in an old project".
+- Grounding (code): each path resolved against the stored profile and its value rendered by code. Unresolvable path → dropped and counted; requirement left without evidence → `missing`; strength with no valid path → removed; unknown req_id → dropped; every requirement appears exactly once. Totals feed `grounding {claims, dropped}`.
