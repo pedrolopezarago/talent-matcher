@@ -8,3 +8,8 @@ pyarrow
 numpy
 scipy
 python-dotenv
+anthropic
+pytest
+pytest-asyncio
+httpx
+psycopg-pool
