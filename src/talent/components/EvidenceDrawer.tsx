@@ -17,7 +17,7 @@ export function EvidenceDrawer({ c, reqs, onClose }: { c: Candidate; reqs: Requi
   return (
     <div className="fixed inset-0 z-40 flex justify-end">
       <div className="absolute inset-0 bg-brand/30 backdrop-blur-[2px]" onClick={onClose} />
-      <aside className="relative h-full w-full max-w-lg overflow-y-auto bg-surface shadow-2xl animate-[slide_220ms_cubic-bezier(.2,.8,.2,1)]">
+      <aside className="relative h-full w-full max-w-lg overflow-y-auto bg-surface shadow-soft animate-[slide_220ms_cubic-bezier(.2,.8,.2,1)]">
         <div className="sticky top-0 z-10 flex items-center gap-4 border-b border-line bg-surface/95 px-6 py-4 backdrop-blur">
           <FitRing fit={c.fit} size={48} />
           <div className="min-w-0 flex-1">

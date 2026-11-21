@@ -57,7 +57,7 @@ export function availabilityTone(a: string): keyof typeof tones {
 }
 
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <div className={`rounded-3xl bg-surface ${className}`}>{children}</div>;
+  return <section className={`border-t border-line !px-0 ${className}`}>{children}</section>;
 }
 
 export function Spinner() {

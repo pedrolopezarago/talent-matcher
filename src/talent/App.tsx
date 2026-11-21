@@ -1,8 +1,8 @@
-import { Download, FileText, History, Hexagon, Plus, RotateCcw, Search, SlidersHorizontal, UsersRound } from "lucide-react";
+import { Download, RotateCcw, UsersRound } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Brief, Candidate, Lang, MatchResult, TeamResult } from "@/shared/contract";
 import * as api from "./api";
-import { ALL_AVAILABILITY, BriefInput, EXAMPLES, type HardFilters } from "./components/BriefInput";
+import { ALL_AVAILABILITY, BriefInput, type HardFilters } from "./components/BriefInput";
 import { CompareBar, CompareModal } from "./components/CompareModal";
 import { EvidenceDrawer } from "./components/EvidenceDrawer";
 import { RequirementsEditor } from "./components/RequirementsEditor";
@@ -32,9 +32,6 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
   const [compareRole, setCompareRole] = useState<string | null>(null);
 
   const [view, setView] = useState<"match" | "team" | "gaps">("match");
-  const [showFilters, setShowFilters] = useState(false);
-  const [showExamples, setShowExamples] = useState(false);
-  void showFilters;
   const reqRef = useRef<HTMLDivElement>(null);
   const resRef = useRef<HTMLDivElement>(null);
 
@@ -104,96 +101,39 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
 
   return (
     <LangContext.Provider value={lang}>
-      <header className="sticky top-0 z-20 bg-canvas/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-4 sm:px-6">
-          <div className="grid size-11 shrink-0 place-items-center rounded-full bg-brand text-on-brand"><Hexagon size={20} /></div>
-          <nav className="flex gap-1.5 overflow-x-auto">
-            {([["match", "Talent Matcher"], ["team", lang === "es" ? "Equipo Propuesto" : "Proposed Team"], ["gaps", lang === "es" ? "Análisis de Brechas" : "Gap Analysis"]] as const).map(([k, label]) => (
+      <header className="sticky top-0 z-20 border-b border-line bg-surface/75 backdrop-blur-xl">
+        <div className="mx-auto flex h-12 max-w-6xl items-center gap-3 px-4 sm:px-6">
+          <div className="flex min-w-0 items-center gap-2 text-sm font-semibold tracking-tight">
+            <UsersRound size={16} className="text-brand" /><span className="hidden truncate sm:inline">Talent Matcher</span>
+          </div>
+          <nav className="mx-auto flex rounded-lg bg-black/[0.05] p-1">
+            {([["match", lang === "es" ? "Búsqueda" : "Search"], ["team", lang === "es" ? "Equipo" : "Team"], ["gaps", lang === "es" ? "Brechas" : "Gaps"]] as const).map(([k, label]) => (
               <button key={k} onClick={() => goView(k)} disabled={k !== "match" && !result}
-                className={`shrink-0 rounded-full px-5 py-2.5 text-sm font-medium transition disabled:opacity-40 ${view === k ? "bg-brand text-on-brand" : "bg-surface text-muted hover:text-ink"}`}>
+                className={`rounded-md px-3 py-1 text-xs font-medium transition disabled:opacity-40 sm:px-4 ${view === k ? "bg-surface text-brand shadow-soft" : "text-muted hover:text-ink"}`}>
                 {label}
               </button>
             ))}
           </nav>
-          <div className="ml-auto flex items-center gap-2">
+          <div className="flex items-center gap-1">
             {team && (
-              <div className="hidden -space-x-2 md:flex">
-                {team.optimal.slice(0, 4).map((s) => (
-                  <span key={s.employee_id + s.slot} title={s.name} className="grid size-9 place-items-center rounded-full border-2 border-canvas bg-orange text-xs font-semibold text-on-brand">
-                    {s.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
-                  </span>
-                ))}
-              </div>
-            )}
-            {brief && (
-              <button onClick={reset} title={t("newSearch")} className="grid size-11 place-items-center rounded-full bg-brand text-on-brand"><RotateCcw size={16} /></button>
-            )}
-            {team && (
-              <button onClick={exportTeam} className="hidden items-center gap-2 rounded-full bg-surface px-4 py-2.5 text-sm font-medium sm:inline-flex">
-                <Download size={15} />{lang === "es" ? "Exportar equipo" : "Export team"}
+              <button onClick={exportTeam} title={lang === "es" ? "Exportar equipo" : "Export team"} className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-ink hover:bg-black/[0.05]">
+                <Download size={14} /><span className="hidden md:inline">{lang === "es" ? "Exportar" : "Export"}</span>
               </button>
             )}
-            <div className="flex rounded-full bg-surface p-1 text-xs font-semibold">
-              {(["en", "es"] as const).map((l) => (
-                <button key={l} onClick={() => setLang(l)} className={`rounded-full px-2.5 py-1.5 ${lang === l ? "bg-brand text-on-brand" : "text-muted"}`}>{l.toUpperCase()}</button>
-              ))}
-            </div>
+            {brief && (
+              <button onClick={reset} title={t("newSearch")} className="grid size-7 place-items-center rounded-md text-muted hover:bg-black/[0.05] hover:text-ink"><RotateCcw size={14} /></button>
+            )}
+            <button onClick={() => setLang(lang === "en" ? "es" : "en")} className="rounded-md px-2 py-1 text-xs font-semibold text-muted hover:bg-black/[0.05]">{lang === "en" ? "ES" : "EN"}</button>
           </div>
         </div>
       </header>
 
-      <aside className="fixed left-4 top-1/2 z-10 hidden -translate-y-1/2 flex-col gap-2 lg:flex">
-        {[
-          { icon: Search, label: t("findTalent"), on: true, act: () => window.scrollTo({ top: 0, behavior: "smooth" }) },
-          { icon: SlidersHorizontal, label: t("filtersTitle"), act: () => setShowFilters((v) => !v) },
-          { icon: FileText, label: "Brief", act: () => reqRef.current?.scrollIntoView({ behavior: "smooth" }) },
-          { icon: History, label: lang === "es" ? "Historial" : "History", act: () => resRef.current?.scrollIntoView({ behavior: "smooth" }) },
-        ].map(({ icon: I, label, on, act }) => (
-          <button key={label} title={label} onClick={act} className={`grid size-11 place-items-center rounded-full transition ${on ? "bg-brand text-on-brand" : "bg-surface text-muted hover:text-ink"}`}><I size={17} /></button>
-        ))}
-      </aside>
-
-      <section className="mx-auto max-w-6xl px-4 pt-4 sm:px-6">
-        <div className="text-xs font-medium text-muted">RRHH / {lang === "es" ? "Movilidad Interna" : "Internal Mobility"}</div>
-        <div className="mt-1 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-semibold tracking-tight text-ink">Internal Talent Matcher</h1>
-            <p className="mt-1 text-sm text-muted">{t("tagline")}{api.usingMocks && <span className="ml-2 rounded-full bg-orange px-2 py-0.5 text-[11px] font-semibold text-on-brand">{t("mockNote")}</span>}</p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <button onClick={() => setShowFilters((v) => !v)} title={t("filtersTitle")} className="grid size-10 place-items-center rounded-full bg-surface"><Search size={16} /></button>
-            {ALL_AVAILABILITY.map((a) => {
-              const on = filters.availability.includes(a);
-              return (
-                <button key={a} aria-pressed={on}
-                  onClick={() => setFilters({ ...filters, availability: on ? filters.availability.filter((x) => x !== a) : [...filters.availability, a] })}
-                  className={`rounded-full px-4 py-2 text-xs font-medium transition ${on ? "bg-brand text-on-brand" : "bg-surface text-muted"}`}>
-                  {a.replace("Roll-off próximo (<3 meses)", "Roll-off <3m")}
-                </button>
-              );
-            })}
-            <select value={filters.minYears} onChange={(e) => setFilters({ ...filters, minYears: Number(e.target.value) })}
-              className="rounded-full bg-surface px-4 py-2 text-xs font-medium outline-none">
-              {[0, 1, 2, 3, 5, 8, 10].map((n) => <option key={n} value={n}>{n === 0 ? t("anyYears") : `Min. ${n} ${lang === "es" ? "años" : "yrs"}`}</option>)}
-            </select>
-            <div className="relative">
-              <button onClick={() => setShowExamples((v) => !v)} className="inline-flex items-center gap-1.5 rounded-full bg-surface px-4 py-2 text-xs font-medium"><Plus size={14} />{t("examples")}</button>
-              {showExamples && (
-                <div className="absolute right-0 z-30 mt-2 w-60 space-y-1 rounded-3xl bg-surface p-2 shadow-lg">
-                  {EXAMPLES.map((ex) => (
-                    <button key={ex.label} onClick={() => { setText(ex.text); setShowExamples(false); goView("match"); }} className="block w-full rounded-full px-3 py-2 text-left text-xs font-medium hover:bg-brand-soft">{ex.label}</button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
+      <main className="mx-auto max-w-5xl space-y-8 px-4 py-6 pb-28 sm:px-6 sm:py-8">
+        <div className="pt-4">
+          <h1 className="text-4xl font-semibold tracking-tight text-ink">Internal Talent Matcher</h1>
+          <p className="mt-1 text-[15px] text-muted">{t("tagline")}{api.usingMocks && <span className="ml-2 text-xs font-medium text-brand">· {t("mockNote")}</span>}</p>
         </div>
-      </section>
-
-      <main className="mx-auto max-w-6xl space-y-4 px-4 py-6 pb-28 sm:px-6 sm:py-8">
-        {!isDemo || !result ? (
-          <BriefInput text={text} setText={setText} onAnalyse={analyse} loading={loading === "parse"} />
-        ) : null}
+        <BriefInput text={text} setText={setText} onAnalyse={analyse} loading={loading === "parse"} filters={filters} setFilters={setFilters} showInput={!isDemo || !result} />
 
         {error && <div className="rounded-xl bg-bad-soft px-4 py-3 text-sm text-bad">{error}</div>}
 
@@ -214,7 +154,7 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
                 <div className="flex justify-end">
                   <button
                     onClick={buildTeam} disabled={loading === "team"}
-                    className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-on-brand transition hover:bg-brand-dark active:scale-[0.98]"
+                    className="inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-medium text-on-brand transition hover:bg-brand-dark active:scale-[0.98]"
                   >
                     {loading === "team" ? <Spinner /> : <UsersRound size={16} />}
                     {loading === "team" ? t("building") : t("buildTeam")}
