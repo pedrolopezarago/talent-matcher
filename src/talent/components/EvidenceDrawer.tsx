@@ -42,7 +42,7 @@ export function EvidenceDrawer({ c, reqs, onClose }: { c: Candidate; reqs: Requi
               {c.coverage.map((cv) => {
                 const r = reqs.find((x) => x.id === cv.req_id);
                 return (
-                  <div key={cv.req_id} className="rounded-xl border border-line p-3">
+                  <div key={cv.req_id} className="rounded-2xl border border-line p-3">
                     <div className="flex items-center gap-2 text-sm">
                       <StatusIcon status={cv.status} />
                       <span className="font-medium">{r?.value ?? cv.req_id}</span>

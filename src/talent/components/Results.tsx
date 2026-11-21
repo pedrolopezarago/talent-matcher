@@ -28,7 +28,7 @@ export function Results({ brief, result, filters, selected, toggleSelect, onOpen
             <button
               key={r.role_id}
               onClick={() => setActive(r.role_id)}
-              className={`rounded-xl px-4 py-2 text-sm font-medium transition ${on ? "bg-brand text-on-brand" : "bg-surface text-ink border border-line hover:border-ink/30"}`}
+              className={`rounded-2xl px-4 py-2 text-sm font-medium transition ${on ? "bg-brand text-on-brand" : "bg-surface text-ink border border-line hover:border-ink/30"}`}
             >
               {ro?.title ?? r.role_id}
               <span className={`ml-2 text-xs ${on ? "text-on-brand/80" : "text-muted"}`}>{r.candidates.filter(pass).length}</span>
@@ -176,7 +176,7 @@ function ReserveLane({ rr, reqs, onOpen }: { rr: RoleResult; reqs: Requirement[]
   const t = useT();
   const [open, setOpen] = useState(false);
   return (
-    <div className="rounded-xl border border-dashed border-line p-4">
+    <div className="rounded-2xl border border-dashed border-line p-4">
       <button onClick={() => setOpen(!open)} className="flex w-full items-center gap-2 text-left">
         <span className="font-medium">{t("reserveTitle")}</span>
         <Pill>{rr.reserve.length}</Pill>
