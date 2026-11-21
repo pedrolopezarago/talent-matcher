@@ -6,7 +6,7 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-MOCKS = Path(__file__).resolve().parents[2] / "frontend" / "src" / "mocks"
+MOCKS = Path(__file__).resolve().parents[2] / "src" / "talent" / "mocks"
 
 app = FastAPI(title="AI Talent Matcher")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])

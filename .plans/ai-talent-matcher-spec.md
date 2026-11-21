@@ -149,10 +149,10 @@ A single page that builds up step by step, with a chat-like input at the top.
    - "Optimal 86% vs greedy 78%" with the swap explained;
    - joint coverage.
 9. **ES/EN toggle** in the header (all UI strings in one dictionary). Sentence case throughout, in a clean NTT-blue style.
-10. **`/demo` route.** Loads a seeded result for the banking brief instantly (from `frontend/src/mocks/`), for the video and as a fallback if the API is slow.
+10. **`/demo` route.** Loads a seeded result for the banking brief instantly (from `src/talent/mocks/`), for the video and as a fallback if the API is slow.
 
 ## 7. API contract (agreed first so both slices can run in parallel)
-The source of truth is `shared/contract.ts`, mirrored by the Pydantic models in `backend/app/models.py`. Mocks live in `frontend/src/mocks/`.
+The source of truth is `shared/contract.ts`, mirrored by the Pydantic models in `backend/app/models.py`. Mocks live in `src/talent/mocks/`.
 
 - `POST /api/brief/parse` `{text, lang}` → `Brief`
 - `POST /api/match` `{brief}` → `MatchResult { roles: RoleResult[] }`
@@ -167,7 +167,7 @@ The source of truth is `shared/contract.ts`, mirrored by the Pydantic models in 
 ## 8. Work split (2 builders, separate folders, one repo)
 - **Builder A (backend):** `backend/` and `scripts/`.
   - Docker Postgres, the ingest and embedding script, the pipeline steps 1–8, the FastAPI app, and deploying to Render/Railway + Supabase.
-- **Builder B (frontend, Pedro):** `frontend/`.
+- **Builder B (frontend, Pedro + Irene):** the Lovable app at the repo root (`src/`, UI in `src/talent/`).
   - Vite + React + TS + Tailwind, built against the mocks first, then pointed at `VITE_API_URL`. Deploy to Vercel.
 - **Shared:** `shared/contract.ts`. Change it only after telling the other person.
 - **Git:** short-lived branches `be/*` and `fe/*`, merged to `main` often. Never commit `.env`, the parquet file or the NTT PDFs.

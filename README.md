@@ -11,7 +11,7 @@ The full spec is in [`.plans/ai-talent-matcher-spec.md`](.plans/ai-talent-matche
 ## Layout
 | Folder | Owner | What |
 |---|---|---|
-| `frontend/` | Builder B | Vite + React + TS, **currently deployed** to Vercel (root directory `frontend`). Works against `src/mocks/` until the API is live |
+| `src/` (repo root) | Frontend | Lovable app (TanStack Start + React + TS), deployed to Vercel with bun. UI in `src/talent/`; works against `src/talent/mocks/` until `VITE_API_URL` is set |
 | `backend/` | Builder A | FastAPI, the matching pipeline, Postgres + pgvector |
 | `shared/` | both | API contract and test briefs. Tell the other person before changing them |
 | `scripts/` | Builder A | Ingest, embedding job, pitch stats |
@@ -23,7 +23,7 @@ docker compose up -d            # Postgres + pgvector
 python3 -m venv .venv && source .venv/bin/activate && pip install -r backend/requirements.txt
 uvicorn backend.app.main:app --reload --port 8000
 
-cd frontend && npm install && npm run dev
+bun install && bun run dev       # frontend, from the repo root
 ```
 
 ## Data
