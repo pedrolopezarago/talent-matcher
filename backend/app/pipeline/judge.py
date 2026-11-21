@@ -58,7 +58,7 @@ async def judge(role: Role, profiles: list[dict], lang: str) -> tuple[list[dict]
         ids = {p["employee_id"] for p in batch}
         user = "Candidates (JSON):\n" + "\n".join(json.dumps(judge_view(p), ensure_ascii=False, default=str) for p in batch)
         try:
-            res = await complete_json("judge", system, user, SCHEMA, max_tokens=12000, budgeted=True)
+            res = await complete_json("judge", system, user, SCHEMA, max_tokens=16000, budgeted=True)
         except LLMError as e:
             log.warning("judge batch failed: %s", e)
             failed += 1

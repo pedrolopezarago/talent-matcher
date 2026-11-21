@@ -116,12 +116,18 @@ async def _call_anthropic(task: Task, system: str, user: str, schema: dict, max_
     if client is None:
         client = _clients["anthropic"] = AsyncAnthropic(api_key=settings.llm_api_key or None)
     model = _model(task)
+    extra = {}
+    # Screening is a simple scoring pass: no reasoning needed. Haiku 5.5 accepts disabled thinking at effort <= high
+    # (Sonnet/Opus 5.5 reject it, so it is only sent to Haiku).
+    if task == "screen" and model.startswith("claude-haiku"):
+        extra["thinking"] = {"type": "disabled"}
     resp = await client.messages.create(
         model=model,
         max_tokens=max_tokens,
         system=[{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}],
         messages=[{"role": "user", "content": user}],
         output_config={"effort": EFFORT[task], "format": {"type": "json_schema", "schema": strict_schema(schema)}},
+        **extra,
     )
     u = resp.usage
     usage.add(model, (u.input_tokens or 0) + (u.cache_read_input_tokens or 0) + (u.cache_creation_input_tokens or 0),
