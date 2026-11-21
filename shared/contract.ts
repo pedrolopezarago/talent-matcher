@@ -26,7 +26,7 @@ export interface Role {
   seniority?: string;       // Trainee | Junior | Mid | Senior | Lead | Principal
   min_years?: number;       // hard filter in code when present
   criticality: number;      // 1–5, used by the team optimiser
-  review_depth: number;     // K chosen by the LLM, clamped 20–150 by code
+  review_depth: number;     // screening depth chosen by the LLM, clamped 100–1000 by code
   requirements: Requirement[];
 }
 
@@ -60,7 +60,7 @@ export interface Candidate {
   city: string;
   years_experience: number;
   fit: number;              // 0–100, computed in code
-  similarity: number;       // 0–1 vector similarity
+  similarity: number;       // 0–1 vector similarity, or normalised keyword score in keyword mode
   coverage: Coverage[];
   strengths: string[];
   gaps: string[];
@@ -84,6 +84,7 @@ export interface RoleResult {
 export interface MatchResult {
   roles: RoleResult[];
   grounding: { claims: number; dropped: number };
+  retrieval?: "vector" | "keyword"; // additive: how candidates were retrieved
 }
 
 export interface TeamSlot { role_id: string; slot: number; employee_id: string; name: string; fit: number }
@@ -100,7 +101,7 @@ export interface TeamResult {
 
 // Endpoints
 // POST /api/brief/parse  {text, lang}   → Brief
-// POST /api/match        {brief}        → MatchResult
-// POST /api/team         {brief, match} → TeamResult
+// POST /api/match        {brief, lang?} → MatchResult   (lang: es|en, default en; additive)
+// POST /api/team         {brief, match, lang?} → TeamResult
 // GET  /api/profile/:id                 → raw profile (all parquet fields)
 // GET  /api/health
