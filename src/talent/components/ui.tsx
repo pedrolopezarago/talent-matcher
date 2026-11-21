@@ -27,12 +27,13 @@ export function FitRing({ fit, size = 56 }: { fit: number; size?: number }) {
 }
 
 const tones = {
-  neutral: "bg-canvas text-muted border-line",
+  neutral: "bg-muted/10 text-ink border-line",
   brand: "bg-brand-soft text-brand-dark border-transparent",
-  ok: "bg-ok-soft text-ok border-transparent",
-  warn: "bg-warn-soft text-warn border-transparent",
+  ok: "bg-sage text-ok border-sage-line",
+  warn: "bg-peach text-ink border-transparent",
   bad: "bg-bad-soft text-bad border-transparent",
-  hidden: "bg-hidden-soft text-hidden border-transparent",
+  hidden: "bg-cream text-ink border-transparent",
+  cream: "bg-cream text-ink border-transparent",
 };
 
 export function Pill({ tone = "neutral", children, title }: { tone?: keyof typeof tones; children: ReactNode; title?: string }) {
@@ -56,9 +57,9 @@ export function availabilityTone(a: string): keyof typeof tones {
 }
 
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <div className={`rounded-2xl border border-line bg-white shadow-[0_1px_2px_rgba(15,27,45,0.04)] ${className}`}>{children}</div>;
+  return <div className={`rounded-xl border border-line bg-surface shadow-soft ${className}`}>{children}</div>;
 }
 
 export function Spinner() {
-  return <span className="inline-block size-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />;
+  return <span className="inline-block size-4 animate-spin rounded-full border-2 border-on-brand/40 border-t-on-brand" />;
 }

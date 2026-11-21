@@ -2,10 +2,11 @@ import { ArrowRight, ChevronDown, Filter, Languages, MapPin, ShieldCheck, Sparkl
 import { useState } from "react";
 import type { Brief, Candidate, MatchResult, Requirement, RoleResult } from "@/shared/contract";
 import { useT } from "../i18n";
+import type { HardFilters } from "./BriefInput";
 import { availabilityTone, Card, FitRing, Pill, StatusIcon } from "./ui";
 
-export function Results({ brief, result, selected, toggleSelect, onOpen }: {
-  brief: Brief; result: MatchResult; selected: string[];
+export function Results({ brief, result, filters, selected, toggleSelect, onOpen }: {
+  brief: Brief; result: MatchResult; filters: HardFilters; selected: string[];
   toggleSelect: (id: string) => void; onOpen: (c: Candidate, roleId: string) => void;
 }) {
   const t = useT();
@@ -14,6 +15,8 @@ export function Results({ brief, result, selected, toggleSelect, onOpen }: {
   if (!rr) return null;
   const role = brief.roles.find((r) => r.id === rr.role_id);
   const reqs = role?.requirements ?? [];
+  const pass = (c: Candidate) => filters.availability.includes(c.availability) && c.years_experience >= filters.minYears;
+  const shown = rr.candidates.filter(pass);
 
   return (
     <div className="space-y-4">
@@ -25,10 +28,10 @@ export function Results({ brief, result, selected, toggleSelect, onOpen }: {
             <button
               key={r.role_id}
               onClick={() => setActive(r.role_id)}
-              className={`rounded-xl px-4 py-2 text-sm font-medium transition ${on ? "bg-ink text-white" : "bg-white text-ink border border-line hover:border-ink/30"}`}
+              className={`rounded-xl px-4 py-2 text-sm font-medium transition ${on ? "bg-brand text-on-brand" : "bg-surface text-ink border border-line hover:border-ink/30"}`}
             >
               {ro?.title ?? r.role_id}
-              <span className={`ml-2 text-xs ${on ? "text-white/60" : "text-muted"}`}>{r.candidates.length}</span>
+              <span className={`ml-2 text-xs ${on ? "text-on-brand/80" : "text-muted"}`}>{r.candidates.filter(pass).length}</span>
             </button>
           );
         })}
@@ -38,10 +41,13 @@ export function Results({ brief, result, selected, toggleSelect, onOpen }: {
         </span>
       </div>
 
+      {result.roles.length > 1 && <p className="-mt-2 text-xs text-muted">{t("noRepeat")}</p>}
+
       <Funnel rr={rr} />
 
       <div className="space-y-3">
-        {rr.candidates.map((c, i) => (
+        {shown.length === 0 && <Card className="p-6 text-center text-sm text-muted">{t("noMatches")}</Card>}
+        {shown.map((c, i) => (
           <CandidateCard
             key={c.employee_id} c={c} rank={i + 1} reqs={reqs}
             selected={selected.includes(c.employee_id)}
@@ -111,7 +117,8 @@ export function CandidateCard({ c, rank, reqs, selected, onSelect, onOpen, muted
             )}
           </div>
           <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-sm text-muted">
-            <span>{c.current_role} · {c.area} · {c.seniority} · {c.years_experience} {t("years")}</span>
+            <span>{c.current_role} · {c.area} · {c.seniority}</span>
+            <span className="font-medium text-ink">{t("experience")}: {c.years_experience} {t("years")}</span>
             <span className="inline-flex items-center gap-0.5"><MapPin size={12} />{c.city}, {c.country}</span>
           </p>
 
@@ -120,10 +127,10 @@ export function CandidateCard({ c, rank, reqs, selected, onSelect, onOpen, muted
               const r = reqById[cv.req_id];
               if (!r) return null;
               return (
-                <span key={cv.req_id} className="inline-flex items-center gap-1 rounded-md bg-canvas px-2 py-0.5 text-xs">
+                <span key={cv.req_id} className="inline-flex items-center gap-1 rounded-md bg-cream px-2 py-0.5 text-xs text-ink">
                   <StatusIcon status={cv.status} size={12} />
                   {r.type === "language" && <Languages size={11} className="text-muted" />}
-                  <span className={r.must ? "font-medium" : "text-muted"}>{r.value}</span>
+                  <span className={r.must ? "font-semibold" : ""}>{r.value}{r.level ? ` · ${r.level}` : ""}</span>
                 </span>
               );
             })}
@@ -139,10 +146,20 @@ export function CandidateCard({ c, rank, reqs, selected, onSelect, onOpen, muted
             </div>
           )}
 
-          <div className="mt-3 grid gap-2 text-sm sm:grid-cols-3">
-            <List title={t("strengths")} items={c.strengths} color="text-ok" />
-            <List title={t("gaps")} items={c.gaps} color="text-bad" />
-            <List title={t("risks")} items={c.risks} color="text-warn" />
+          <div className="mt-4 grid gap-3 text-sm md:grid-cols-2">
+            <div className="rounded-lg border border-sage-line bg-sage/40 p-3">
+              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-ok">{t("whyFits")}</div>
+              <ul className="space-y-0.5 leading-relaxed">{c.strengths.map((x) => <li key={x}>{x}</li>)}</ul>
+            </div>
+            <div className="rounded-lg border border-orange/60 bg-bad-soft p-3">
+              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-bad">{t("risksGaps")}</div>
+              {c.gaps.length + c.risks.length === 0 ? <p className="text-muted">{t("noRisks")}</p> : (
+                <ul className="space-y-0.5 leading-relaxed">
+                  {c.gaps.map((x) => <li key={"g" + x} className="flex gap-1.5"><span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-orange" />{x}</li>)}
+                  {c.risks.map((x) => <li key={"r" + x} className="flex gap-1.5"><span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-peach" />{x}</li>)}
+                </ul>
+              )}
+            </div>
           </div>
 
           <button onClick={onOpen} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-brand opacity-80 hover:opacity-100">
@@ -154,23 +171,12 @@ export function CandidateCard({ c, rank, reqs, selected, onSelect, onOpen, muted
   );
 }
 
-function List({ title, items, color }: { title: string; items: string[]; color: string }) {
-  if (!items.length) return <div />;
-  return (
-    <div>
-      <div className={`text-xs font-semibold ${color}`}>{title}</div>
-      <ul className="mt-0.5 space-y-0.5 text-[13px] leading-snug text-ink/80">
-        {items.map((s) => <li key={s}>{s}</li>)}
-      </ul>
-    </div>
-  );
-}
 
 function ReserveLane({ rr, reqs, onOpen }: { rr: RoleResult; reqs: Requirement[]; onOpen: (c: Candidate) => void }) {
   const t = useT();
   const [open, setOpen] = useState(false);
   return (
-    <div className="rounded-2xl border border-dashed border-line p-4">
+    <div className="rounded-xl border border-dashed border-line p-4">
       <button onClick={() => setOpen(!open)} className="flex w-full items-center gap-2 text-left">
         <span className="font-medium">{t("reserveTitle")}</span>
         <Pill>{rr.reserve.length}</Pill>

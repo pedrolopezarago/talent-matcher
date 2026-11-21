@@ -34,7 +34,7 @@ export function RequirementsEditor({ brief, setBrief, onFind, loading }: {
         <button
           onClick={onFind}
           disabled={loading}
-          className="inline-flex items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-on-brand transition hover:bg-brand-dark active:scale-[0.98] disabled:opacity-50"
         >
           {loading ? <Spinner /> : <Search size={16} />}
           {loading ? t("matching") : t("findCandidates")}
@@ -77,7 +77,7 @@ function RoleCard({ role, update }: { role: Role; update: (fn: (r: Role) => Role
             key={q.id}
             title={q.source_quote ? `“${q.source_quote}”${q.implicit ? ` · ${t("implicit")}` : ""}` : undefined}
             className={`group inline-flex items-center gap-1 rounded-full border text-xs font-medium transition ${
-              q.must ? "border-brand bg-brand text-white" : "border-brand/40 bg-white text-brand-dark"
+              q.must ? "border-brand bg-brand text-on-brand" : "border-brand/40 bg-surface text-brand-dark"
             }`}
           >
             <button
@@ -86,7 +86,7 @@ function RoleCard({ role, update }: { role: Role; update: (fn: (r: Role) => Role
             >
               {q.implicit && <Sparkle size={11} className="shrink-0" />}
               {q.value}{q.level ? ` ${q.level}` : ""}
-              <span className={`ml-1 text-[10px] ${q.must ? "text-white/70" : "text-muted"}`}>
+              <span className={`ml-1 text-[10px] ${q.must ? "text-on-brand/70" : "text-muted"}`}>
                 {q.must ? t("must") : t("nice")}
               </span>
             </button>

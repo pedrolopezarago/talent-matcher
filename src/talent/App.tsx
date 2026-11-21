@@ -2,7 +2,7 @@ import { RotateCcw, UsersRound } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Brief, Candidate, Lang, MatchResult, TeamResult } from "@/shared/contract";
 import * as api from "./api";
-import { BriefInput } from "./components/BriefInput";
+import { ALL_AVAILABILITY, BriefInput, EXAMPLES, type HardFilters } from "./components/BriefInput";
 import { CompareBar, CompareModal } from "./components/CompareModal";
 import { EvidenceDrawer } from "./components/EvidenceDrawer";
 import { RequirementsEditor } from "./components/RequirementsEditor";
@@ -18,6 +18,7 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
   const t = (k: Parameters<typeof translate>[1], v?: Record<string, string | number>) => translate(lang, k, v);
 
   const [text, setText] = useState("");
+  const [filters, setFilters] = useState<HardFilters>({ availability: ALL_AVAILABILITY, minYears: 0 });
   const [brief, setBrief] = useState<Brief | null>(isDemo ? api.demoData.brief() : null);
   const [result, setResult] = useState<MatchResult | null>(isDemo ? api.demoData.match() : null);
   const [team, setTeam] = useState<TeamResult | null>(null);
@@ -85,11 +86,11 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
 
   return (
     <LangContext.Provider value={lang}>
-      <header className="sticky top-0 z-20 border-b border-line bg-white/85 backdrop-blur">
+      <header className="sticky top-0 z-20 border-b border-line bg-canvas/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
-          <div className="grid size-8 place-items-center rounded-lg bg-brand text-white"><UsersRound size={18} /></div>
+          <div className="grid size-8 place-items-center rounded-lg bg-brand text-on-brand"><UsersRound size={18} /></div>
           <div className="min-w-0">
-            <div className="font-semibold leading-tight">AI Talent Matcher</div>
+            <div className="font-bold leading-tight tracking-tight">Internal Talent Matcher</div>
             <div className="hidden truncate text-xs text-muted sm:block">{t("tagline")}</div>
           </div>
           {api.usingMocks && <span className="hidden rounded-full bg-warn-soft px-2 py-0.5 text-[11px] font-medium text-warn sm:inline">{t("mockNote")}</span>}
@@ -101,7 +102,7 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
             )}
             <div className="flex rounded-lg border border-line p-0.5 text-xs font-semibold">
               {(["en", "es"] as const).map((l) => (
-                <button key={l} onClick={() => setLang(l)} className={`rounded-md px-2 py-1 ${lang === l ? "bg-ink text-white" : "text-muted"}`}>
+                <button key={l} onClick={() => setLang(l)} className={`rounded-md px-2 py-1 ${lang === l ? "bg-brand text-on-brand" : "text-muted"}`}>
                   {l.toUpperCase()}
                 </button>
               ))}
@@ -110,9 +111,24 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
         </div>
       </header>
 
+      <div className="border-b border-sage-line bg-sage/50">
+        <div className="mx-auto flex max-w-6xl items-center gap-2 overflow-x-auto px-4 py-2.5 sm:px-6">
+          <span className="shrink-0 text-xs font-medium text-muted">{t("examples")}:</span>
+          {EXAMPLES.map((ex) => (
+            <button
+              key={ex.label}
+              onClick={() => { setText(ex.text); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+              className="shrink-0 rounded-full border border-sage-line bg-surface px-3 py-1 text-xs font-medium text-ink transition hover:border-brand hover:text-brand-dark"
+            >
+              {ex.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <main className="mx-auto max-w-6xl space-y-6 px-4 py-6 pb-28 sm:px-6 sm:py-8">
         {!isDemo || !result ? (
-          <BriefInput text={text} setText={setText} onAnalyse={analyse} loading={loading === "parse"} />
+          <BriefInput text={text} setText={setText} onAnalyse={analyse} loading={loading === "parse"} filters={filters} setFilters={setFilters} />
         ) : null}
 
         {error && <div className="rounded-xl bg-bad-soft px-4 py-3 text-sm text-bad">{error}</div>}
@@ -132,14 +148,14 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
                 <div className="flex justify-end">
                   <button
                     onClick={buildTeam} disabled={loading === "team"}
-                    className="inline-flex items-center gap-2 rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-ink/85 active:scale-[0.98]"
+                    className="inline-flex items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-on-brand transition hover:bg-brand-dark active:scale-[0.98]"
                   >
                     {loading === "team" ? <Spinner /> : <UsersRound size={16} />}
                     {loading === "team" ? t("building") : t("buildTeam")}
                   </button>
                 </div>
                 <Results
-                  brief={brief} result={result} selected={selected} toggleSelect={toggleSelect}
+                  brief={brief} result={result} filters={filters} selected={selected} toggleSelect={toggleSelect}
                   onOpen={(c, roleId) => setDrawer({ c, roleId })}
                 />
               </>

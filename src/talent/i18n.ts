@@ -2,7 +2,19 @@ import { createContext, useContext } from "react";
 import type { Lang } from "@/shared/contract";
 
 const en = {
-  tagline: "The person you need is already in the company.",
+  tagline: "Internal mobility: find the right people already on the team.",
+  filtersTitle: "Hard filters",
+  filtersHint: "Applied in code, never by the AI.",
+  availabilityLabel: "Availability",
+  minYearsLabel: "Minimum years of experience",
+  anyYears: "Any",
+  whyFits: "Why they fit",
+  risksGaps: "Risks & gaps",
+  noRisks: "No relevant risks detected.",
+  noRepeat: "Each person appears in one role only.",
+  noMatches: "No candidates pass the current filters.",
+  experience: "Experience",
+  findTalent: "Find internal talent",
   briefTitle: "Describe the project",
   briefHint: "Write the need as you would in an email: roles, skills, sector, languages, start date. Say what is essential and what is a plus.",
   briefPlaceholder: "We are migrating a bank's core platform to AWS. We need a cloud architect…",
@@ -61,7 +73,19 @@ const en = {
 };
 
 const es: typeof en = {
-  tagline: "La persona que necesitas ya está en la empresa.",
+  tagline: "Movilidad interna: encuentra a las personas adecuadas dentro de la empresa.",
+  filtersTitle: "Filtros estrictos",
+  filtersHint: "Se aplican en código, nunca por la IA.",
+  availabilityLabel: "Disponibilidad",
+  minYearsLabel: "Años mínimos de experiencia",
+  anyYears: "Cualquiera",
+  whyFits: "Por qué encaja",
+  risksGaps: "Riesgos y brechas",
+  noRisks: "Sin riesgos relevantes detectados.",
+  noRepeat: "Cada persona aparece en un solo rol.",
+  noMatches: "Ningún candidato cumple los filtros actuales.",
+  experience: "Experiencia",
+  findTalent: "Buscar talento interno",
   briefTitle: "Describe el proyecto",
   briefHint: "Escribe la necesidad como en un email: roles, skills, sector, idiomas, fecha de inicio. Indica qué es imprescindible y qué es un plus.",
   briefPlaceholder: "Estamos migrando la plataforma core de un banco a AWS. Necesitamos un arquitecto cloud…",
