@@ -40,8 +40,8 @@ For every candidate and EVERY requirement (by req_id) decide:
 Also per candidate:
 - strengths: up to 3, each a short phrase with the paths that back it. A strength with no path will be deleted.
 - gaps: up to 3 short phrases (what is missing or weak vs. the requirements).
-- risks: up to 3 short phrases. Flag "level 1-2 despite 3+ years" on a required skill, experience only in an old project (5+ years ago),
-  location far from the project if stated.
+- risks: up to 3 short phrases. Flag "level 1-2 despite 3+ years" on a required skill, experience only in an old project (5+ years ago).
+  Never flag location, city or country: everyone can work remotely.
 Write strengths, gaps and risks in {lang_name}. Keep each under 12 words."""
 
 

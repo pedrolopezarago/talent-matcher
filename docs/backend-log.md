@@ -65,3 +65,6 @@ Running log of what the backend team did and why. Newest at the bottom.
 - Nullable schema fields sent as the documented `anyOf [.., null]` form.
 - Reserve lane is computed even when nobody passes the filters (that's when it matters most).
 - `usage` is a process-wide tally reset per request: fine for a single-user demo; concurrent requests would share the cost cap.
+
+### Location
+- NTT DATA confirmed everyone can work remotely: location is never a filter nor a risk (judge prompt told not to flag it).
