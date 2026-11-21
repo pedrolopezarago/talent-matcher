@@ -153,7 +153,7 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
             {view === "gaps" && team ? (
               <GapView brief={brief} team={team} es={lang === "es"} />
             ) : showTeam && team ? (
-              <TeamView brief={brief} team={team} onBack={() => goView("match")} />
+              <TeamView brief={brief} match={result} team={team} onBack={() => goView("match")} />
             ) : (
               <>
                 <div className="flex justify-end">

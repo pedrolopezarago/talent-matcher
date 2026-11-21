@@ -1,12 +1,16 @@
-# AI Talent Matcher
+# Perfect Fit Talent Finder
+
+Imported website: https://github.com/pedrolopezarago/talent-matcher.git
 
 NTT DATA case, CDTM × UPV-UV Hackathon, 21 Nov 2026.
 
 **The person you need is already in the company. We find them.** Describe a project, and the app extracts requirements per role, applies hard filters in code, matches people by meaning, explains every match with verified evidence and builds the best overall team.
 
-**Live:** https://talent-matcher-five.vercel.app · demo with seeded data: https://talent-matcher-five.vercel.app/demo
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/8279d0ff-ecf6-4822-ba34-790536047c76).
 
-## How we built it — Improven loop logbook
+- **Ship faster**: describe what you want to build and Lovable handles the code.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ### Value statement
 For **NTT DATA staffing managers** who must staff a new project fast, **AI Talent Matcher** is an internal talent search that turns a free-text project brief into an evidence-backed shortlist per role and the best overall team in about a minute. **Unlike** keyword search in HR tools (or hiring externally), it finds people who describe the same skill with other words, enforces hard rules (availability, years, languages) in code, and shows the profile evidence behind every match.
@@ -63,10 +67,3 @@ python -m pytest -q                         # backend tests, no LLM cost
 
 bun install && bun run dev       # frontend, from the repo root
 ```
-
-## Data
-`profiles.parquet` (190k synthetic NTT DATA profiles) is **not** in the repo. Download it from the link in the NTT DATA "Data & Resources" PDF and put it in the repo root.
-
-## Honesty
-- The backend pipeline is real (see `docs/backend-architecture.md`); the deployed frontend still uses its seeded mocks until `VITE_API_URL` points at a deployed backend.
-- The `/demo` route uses a seeded result.

@@ -28,6 +28,5 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
-- App UI lives in src/talent (ported from the hackathon Vite app); API types in src/shared/contract.ts — keeps the shared backend contract in one place.
-- Use src/talent/results-state.ts for the non-mutating filtered, unique-person display projection and role-scoped selection keys; keep the original API response for team requests so UI fixes never change backend inputs.
-- Comparisons carry each profile's role and requirements, including reserves, so evidence cannot be mixed across roles with overlapping requirement IDs.
+
+- TalentIn's interface lives in `src/talent/`, with its shared API contract in `src/shared/contract.ts`; seeded mocks are the default and `VITE_API_URL` switches to the external matching service.
