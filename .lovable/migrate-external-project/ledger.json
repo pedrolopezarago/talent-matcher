@@ -1,0 +1,8 @@
+[
+{"capability":"frontend code","source":"frontend/src","outcome":"migrate","status":"verified","next_action":"none"},
+{"capability":"demo route","source":"/demo","outcome":"migrate","status":"verified","next_action":"none"},
+{"capability":"backend API","source":"backend/app/main.py (FastAPI stub returning mocks)","outcome":"mocks served in-app; VITE_API_URL still supported","status":"verified","next_action":"build real matching pipeline when ready"},
+{"capability":"database / records","source":"none in code (planned Postgres+pgvector)","outcome":"absent","status":"verified","next_action":"none"},
+{"capability":"auth","source":"none","outcome":"absent","status":"verified","next_action":"none"},
+{"capability":"LLM / embeddings","source":".env.example only, unused","outcome":"not yet implemented in source","status":"accepted","next_action":"none"}
+]

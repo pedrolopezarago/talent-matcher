@@ -28,3 +28,4 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+- App UI lives in src/talent (ported from the hackathon Vite app); API types in src/shared/contract.ts — keeps the shared backend contract in one place.
