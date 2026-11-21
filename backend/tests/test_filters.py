@@ -45,3 +45,9 @@ def test_where_must_language_and_min_years():
 def test_where_language_without_level_defaults_b2():
     sql, params = build_where(role([req("q1", type="language", value="Inglés", must=True)]), ["En banca"])
     assert 4 in params.values()
+
+
+def test_where_seniority_tier():
+    sql, params = build_where(role([]), ["En banca"], seniorities=["Junior", "Mid"])
+    assert "nivel_seniority" in sql and params["seniorities"] == ["Junior", "Mid"]
+    assert "nivel_seniority" not in build_where(role([]), ["En banca"])[0]

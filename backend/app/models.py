@@ -115,6 +115,23 @@ class TeamSlot(BaseModel):
     employee_id: str
     name: str
     fit: float
+    tier: Literal["expert", "support"] = "support"  # one expert per team; the rest Junior/Mid
+    seniority: str = ""
+    off_tier: bool = False  # no Junior/Mid (or no expert) was available, so another level fills the slot
+
+
+class TrainingRecommendation(BaseModel):
+    requirement: str
+    training: str
+    kind: Literal["certification", "course", "mentoring", "project"]
+
+
+class TrainingPlan(BaseModel):
+    employee_id: str
+    name: str
+    role_id: str
+    gaps: list[str]  # must requirements not fully met
+    recommendations: list[TrainingRecommendation]
 
 
 class Swap(BaseModel):
@@ -136,6 +153,7 @@ class TeamResult(BaseModel):
     swaps: list[Swap]
     explanation: str
     joint_coverage: list[JointCoverage]
+    training: list[TrainingPlan] = []
 
 
 class ParseRequest(BaseModel):

@@ -87,7 +87,25 @@ export interface MatchResult {
   retrieval?: "vector" | "keyword"; // additive: how candidates were retrieved
 }
 
-export interface TeamSlot { role_id: string; slot: number; employee_id: string; name: string; fit: number }
+export interface TeamSlot {
+  role_id: string; slot: number; employee_id: string; name: string; fit: number;
+  tier?: "expert" | "support"; // additive: one expert (Senior/Lead/Principal) per team, the rest Junior/Mid
+  seniority?: string;           // additive
+  off_tier?: boolean;           // additive: nobody at the right level was available, another level fills the slot
+}
+
+// additive: upskilling for team members who don't fully meet some MUST requirement
+export interface TrainingRecommendation {
+  requirement: string;
+  training: string;             // e.g. "AWS Certified Solutions Architect – Associate"
+  kind: "certification" | "course" | "mentoring" | "project";
+}
+
+export interface TrainingPlan {
+  employee_id: string; name: string; role_id: string;
+  gaps: string[];               // MUST requirements not fully met
+  recommendations: TrainingRecommendation[];
+}
 
 export interface TeamResult {
   optimal: TeamSlot[];
@@ -97,6 +115,7 @@ export interface TeamResult {
   swaps: { role_id: string; greedy: string; optimal: string }[];
   explanation: string;
   joint_coverage: { req_value: string; covered_by: string[] }[];
+  training?: TrainingPlan[];  // additive
 }
 
 // Endpoints
