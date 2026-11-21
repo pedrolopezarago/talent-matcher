@@ -1,0 +1,14 @@
+{
+  "optimal": [
+    {"role_id": "r1", "slot": 1, "employee_id": "NTT0000101", "name": "Lucía Ferrer Gil", "fit": 91},
+    {"role_id": "r2", "slot": 1, "employee_id": "NTT0000303", "name": "Javier Ortega Ruiz", "fit": 88}
+  ],
+  "greedy": [
+    {"role_id": "r1", "slot": 1, "employee_id": "NTT0000101", "name": "Lucía Ferrer Gil", "fit": 91},
+    {"role_id": "r2", "slot": 1, "employee_id": "NTT0000303", "name": "Javier Ortega Ruiz", "fit": 88}
+  ],
+  "optimal_score": 86, "greedy_score": 78,
+  "swaps": [],
+  "explanation": "MOCK — real swap explanation comes from /api/team.",
+  "joint_coverage": [{"req_value": "AWS", "covered_by": ["NTT0000101"]}, {"req_value": "Java", "covered_by": ["NTT0000303"]}]
+}

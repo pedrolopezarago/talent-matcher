@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+pydantic>=2
+openai
+psycopg[binary]
+pgvector
+pyarrow
+numpy
+scipy
+python-dotenv

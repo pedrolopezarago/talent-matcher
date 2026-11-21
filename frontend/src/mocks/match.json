@@ -1,0 +1,62 @@
+{
+  "grounding": {"claims": 142, "dropped": 3},
+  "roles": [
+    {
+      "role_id": "r1",
+      "availability_rule": "Start in 2 months → 'En banca' + 'Roll-off próximo'",
+      "funnel": {"total": 190000, "after_filters": 3412, "reviewed": 80, "ranked": 10},
+      "candidates": [
+        {
+          "employee_id": "NTT0000101", "name": "Lucía Ferrer Gil", "current_role": "Solutions Architect", "area": "Cloud & Infraestructura",
+          "seniority": "Senior", "availability": "En banca", "country": "España", "city": "Madrid", "years_experience": 11,
+          "fit": 91, "similarity": 0.82,
+          "coverage": [
+            {"req_id": "r1-q1", "status": "met", "evidence": [{"path": "skills[0]", "value": "AWS (nivel 5, 7 años)"}]},
+            {"req_id": "r1-q2", "status": "met", "evidence": [{"path": "proyectos[1].tecnologias[2]", "value": "Terraform"}]},
+            {"req_id": "r1-q3", "status": "met", "evidence": [{"path": "sector_principal", "value": "Banca y Finanzas"}]},
+            {"req_id": "r1-q4", "status": "met", "evidence": [{"path": "idiomas[1]", "value": "Inglés C1"}]}
+          ],
+          "strengths": ["7 years of AWS at level 5", "Led a banking cloud migration (2025)"],
+          "gaps": [], "risks": ["No AWS certification listed"],
+          "hidden": {"different_area": false, "vocab_bridges": []}
+        },
+        {
+          "employee_id": "NTT0000202", "name": "Marco Bianchi", "current_role": "DevOps Engineer", "area": "Sanidad y Farma",
+          "seniority": "Lead", "availability": "Roll-off próximo (<3 meses)", "country": "Italia", "city": "Milano", "years_experience": 9,
+          "fit": 84, "similarity": 0.74,
+          "coverage": [
+            {"req_id": "r1-q1", "status": "met", "evidence": [{"path": "skills[2]", "value": "Amazon Web Services (nivel 4, 5 años)"}]},
+            {"req_id": "r1-q2", "status": "partial", "evidence": [{"path": "skills[4]", "value": "Infrastructure as Code (nivel 3)"}]},
+            {"req_id": "r1-q3", "status": "missing", "evidence": []},
+            {"req_id": "r1-q4", "status": "met", "evidence": [{"path": "idiomas[1]", "value": "Inglés C1"}]}
+          ],
+          "strengths": ["Architected hospital platform on AWS", "Lead seniority"],
+          "gaps": ["No banking sector evidence"], "risks": ["Roll-off: free in <3 months", "Based in Milano; no international mobility"],
+          "hidden": {"different_area": true, "vocab_bridges": [{"asked": "AWS", "found": "Amazon Web Services"}, {"asked": "Terraform", "found": "Infrastructure as Code"}]}
+        }
+      ],
+      "reserve": []
+    },
+    {
+      "role_id": "r2",
+      "availability_rule": "Start in 2 months → 'En banca' + 'Roll-off próximo'",
+      "funnel": {"total": 190000, "after_filters": 5120, "reviewed": 40, "ranked": 10},
+      "candidates": [
+        {
+          "employee_id": "NTT0000303", "name": "Javier Ortega Ruiz", "current_role": "Backend Developer", "area": "Software Engineering",
+          "seniority": "Mid", "availability": "En banca", "country": "España", "city": "Valencia", "years_experience": 5,
+          "fit": 88, "similarity": 0.79,
+          "coverage": [
+            {"req_id": "r2-q1", "status": "met", "evidence": [{"path": "skills[0]", "value": "Java (nivel 4, 5 años)"}]},
+            {"req_id": "r2-q2", "status": "met", "evidence": [{"path": "proyectos[0].tecnologias[1]", "value": "Spring Cloud"}]},
+            {"req_id": "r2-q3", "status": "missing", "evidence": []}
+          ],
+          "strengths": ["5 years of Java", "Microservices in a banking project"],
+          "gaps": ["No Kafka evidence (nice-to-have)"], "risks": [],
+          "hidden": {"different_area": false, "vocab_bridges": [{"asked": "Microservicios", "found": "Spring Cloud"}]}
+        }
+      ],
+      "reserve": []
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+*.parquet
+*.pdf
+*.npy
+data/
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+video/assets/
+video/vo/
+video/film/
