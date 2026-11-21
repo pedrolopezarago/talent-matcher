@@ -7,9 +7,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.app.config import settings
 from backend.app.llm import LLMError, usage
 from backend.app.db import get_profile
-from backend.app.models import Brief, MatchRequest, MatchResult, ParseRequest
+from backend.app.models import Brief, MatchRequest, MatchResult, ParseRequest, TeamRequest, TeamResult
 from backend.app.pipeline.match import match
 from backend.app.pipeline.parse import parse_brief
+from backend.app.pipeline.team import build_team, explain, joint_coverage, swaps
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("api")
@@ -54,3 +55,14 @@ def profile_route(employee_id: str):
     if p is None:
         raise HTTPException(status_code=404, detail="profile not found")
     return p
+
+
+@app.post("/api/team", response_model=TeamResult)
+async def team_route(body: TeamRequest):
+    usage.reset()
+    optimal, greedy, so, sg = build_team(body.brief, body.match)
+    sw = swaps(optimal, greedy)
+    text = await explain(optimal, greedy, so, sg, sw, body.lang)
+    log.info("team: optimal %.1f vs greedy %.1f, $%.4f", so, sg, usage.usd())
+    return TeamResult(optimal=optimal, greedy=greedy, optimal_score=so, greedy_score=sg, swaps=sw, explanation=text,
+                      joint_coverage=joint_coverage(body.brief, body.match, optimal))

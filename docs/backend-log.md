@@ -51,3 +51,9 @@ Running log of what the backend team did and why. Newest at the bottom.
 - Role with zero profiles after filters → returned with an empty list and no LLM calls.
 - Funnel: total 190,000 → after_filters → reviewed (retrieved and screened) → ranked (judged).
 - Live run pending: needs `LLM_API_KEY` in `.env` (empty for now).
+
+### Task 10 — `/api/team`
+- Slots = roles × headcount; value = fit × criticality; `scipy.optimize.linear_sum_assignment` on a slots × people matrix (rectangular is fine; impossible pairs get a huge cost and are discarded, so missing candidates leave a slot empty instead of crashing). Nobody fills two slots.
+- Greedy baseline: most critical role first, best free candidate each time. Score = Σ fit·criticality / Σ criticality over all slots (empty slot = 0).
+- Swaps = people that differ per role; one-sentence explanation from the LLM (Haiku, numbers only) with a template fallback. Joint coverage = which team members cover each must requirement.
+- Team composition note from Dani (for later): real staffing usually means one expert + more junior profiles; for now the builder picks the best fit per slot.
