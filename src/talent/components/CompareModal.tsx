@@ -11,10 +11,10 @@ export function CompareBar({ n, onOpen, onClear }: { n: number; onOpen: () => vo
   if (n < 1) return null;
   return (
     <div className="fixed inset-x-0 bottom-4 z-30 flex justify-center px-4">
-      <div className="flex max-w-full flex-wrap items-center justify-center gap-3 rounded-lg border border-support/20 bg-surface px-4 py-3 text-sm shadow-soft">
-        <span className="font-display text-lg font-semibold tabular-nums text-support-dark">{n}</span>
+      <div className="flex max-w-full flex-wrap items-center justify-center gap-3 rounded-lg border border-line bg-surface px-4 py-3 text-sm shadow-soft">
+        <span className="font-display text-lg font-semibold tabular-nums text-brand">{n}</span>
         <Button variant="plain" size="sm" onClick={onClear}>{t("clear")}</Button>
-        <Button variant="support" className="h-auto min-h-9 py-2" onClick={onOpen} disabled={n < 2}>
+        <Button variant="primary" className="h-auto min-h-9 py-2" onClick={onOpen} disabled={n < 2}>
           <Scale size={16} />{t("compareN", { n })}
         </Button>
       </div>

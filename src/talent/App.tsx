@@ -109,7 +109,7 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
       <header className="sticky top-0 z-20 border-b border-line bg-surface/75 backdrop-blur-xl">
         <div className="mx-auto flex h-12 max-w-6xl items-center gap-3 px-4 sm:px-6">
           <div className="flex min-w-0 items-center gap-2 font-display text-sm font-semibold">
-            <UsersRound size={16} className="text-brand" /><span className="hidden truncate sm:inline">Talent Matcher</span>
+            <UsersRound size={16} className="text-brand" /><span className="hidden truncate sm:inline">TalentIn</span>
           </div>
           <nav className="mx-auto flex rounded-lg bg-brand-soft p-1">
             {([["match", lang === "es" ? "Búsqueda" : "Search"], ["team", lang === "es" ? "Equipo" : "Team"], ["gaps", lang === "es" ? "Brechas" : "Gaps"]] as const).map(([k, label]) => (
@@ -135,7 +135,7 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
 
       <main className="mx-auto max-w-5xl space-y-8 px-4 py-6 pb-28 sm:px-6 sm:py-8">
         <div className="pt-4">
-          <h1 className="text-4xl font-semibold text-ink">Internal Talent Matcher</h1>
+          <h1 className="text-4xl font-semibold text-ink">TalentIn</h1>
           <p className="mt-1 text-[15px] text-muted">{t("tagline")}{api.usingMocks && <span className="ml-2 text-xs font-medium text-brand">· {t("mockNote")}</span>}</p>
         </div>
         <BriefInput text={text} setText={setText} onAnalyse={analyse} loading={loading === "parse"} filters={filters} setFilters={setFilters} showInput={!isDemo || !result} />
@@ -157,9 +157,9 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
             ) : (
               <>
                 <div className="flex justify-end">
-                  <Button variant="primary"
+                  <Button variant="team"
                     onClick={buildTeam} disabled={loading === "team"}
-                    className="inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-medium text-on-brand transition hover:bg-brand-dark active:scale-[0.98]"
+                    className="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm active:scale-[0.98]"
                   >
                     {loading === "team" ? <Spinner /> : <UsersRound size={16} />}
                     {loading === "team" ? t("building") : t("buildTeam")}
