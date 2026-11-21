@@ -54,7 +54,9 @@ export function analyseTeamRisks(brief: Brief, match: MatchResult, team: TeamRes
         status: candidate?.coverage.find((item) => item.req_id === requirement.id)?.status ?? "missing",
       }));
       const met = coverage.filter((item) => item.status === "met");
-      const gaps = coverage.filter((item) => item.status !== "met") as TeamRisk["coverage"];
+      const gaps: { name: string; status: "partial" | "missing" }[] = coverage.flatMap((item) =>
+        item.status === "met" ? [] : [{ name: item.name, status: item.status }],
+      );
 
       if (met.length === 0) {
         const partial = coverage.some((item) => item.status === "partial");
