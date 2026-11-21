@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Quote, X } from "lucide-react";
 import { useEffect } from "react";
 import type { Candidate, Requirement } from "@/shared/contract";
@@ -16,7 +17,7 @@ export function EvidenceDrawer({ c, reqs, onClose }: { c: Candidate; reqs: Requi
 
   return (
     <div className="fixed inset-0 z-40 flex justify-end">
-      <div className="absolute inset-0 bg-brand/30 backdrop-blur-[2px]" onClick={onClose} />
+      <div className="absolute inset-0 bg-overlay backdrop-blur-[2px]" onClick={onClose} />
       <aside className="relative h-full w-full max-w-lg overflow-y-auto bg-surface shadow-soft animate-[slide_220ms_cubic-bezier(.2,.8,.2,1)]">
         <div className="sticky top-0 z-10 flex items-center gap-4 border-b border-line bg-surface/95 px-6 py-4 backdrop-blur">
           <FitRing fit={c.fit} size={48} />
@@ -24,7 +25,7 @@ export function EvidenceDrawer({ c, reqs, onClose }: { c: Candidate; reqs: Requi
             <h3 className="truncate font-semibold">{c.name}</h3>
             <p className="truncate text-sm text-muted">{c.current_role} · {c.area}</p>
           </div>
-          <button onClick={onClose} aria-label={t("close")} className="rounded-lg p-1.5 text-muted hover:bg-canvas"><X size={18} /></button>
+          <Button variant="plain" onClick={onClose} aria-label={t("close")} className="rounded-lg p-1.5 text-muted hover:bg-canvas"><X size={18} /></Button>
         </div>
 
         <div className="space-y-6 px-6 py-5">

@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Repeat } from "lucide-react";
 import type { Brief, TeamResult } from "@/shared/contract";
 import { useT } from "../i18n";
@@ -11,9 +12,9 @@ export function TeamView({ brief, team, onBack }: { brief: Brief; team: TeamResu
 
   return (
     <div className="space-y-4">
-      <button onClick={onBack} className="inline-flex items-center gap-1 text-sm text-muted hover:text-ink">
+      <Button variant="plain" onClick={onBack} className="inline-flex items-center gap-1 text-sm text-muted hover:text-ink">
         <ArrowLeft size={14} /> {t("backToResults")}
-      </button>
+      </Button>
 
       <Card className="p-5 sm:p-6">
         <h2 className="text-lg font-semibold">{t("teamTitle")}</h2>
@@ -27,8 +28,8 @@ export function TeamView({ brief, team, onBack }: { brief: Brief; team: TeamResu
             <div key={`${s.role_id}-${s.slot}`} className={`flex items-center gap-3 rounded-2xl border p-3 ${swappedIn.has(s.name) ? "border-hidden/40 bg-hidden-soft/40" : "border-line"}`}>
               <FitRing fit={s.fit} size={48} />
               <div className="min-w-0">
-                <div className="text-xs text-muted">{title(s.role_id)}{brief.roles.find((r) => r.id === s.role_id)?.headcount! > 1 ? ` · ${t("slot")} ${s.slot}` : ""}</div>
-                <div className="truncate font-semibold">{s.name}</div>
+                <div className="text-xs text-muted">{title(s.role_id)}{(brief.roles.find((r) => r.id === s.role_id)?.headcount ?? 1) > 1 ? ` · ${t("slot")} ${s.slot}` : ""}</div>
+                <div className="font-display font-semibold">{s.name}</div>
               </div>
             </div>
           ))}
@@ -73,7 +74,7 @@ function ScoreBar({ label, value, strong }: { label: string; value: number; stro
       <div className="h-3 flex-1 overflow-hidden rounded-full bg-canvas">
         <div className="h-full rounded-full transition-[width] duration-700" style={{ width: `${value}%`, background: strong ? fitColor(value) : "var(--color-line)" }} />
       </div>
-      <span className={`w-12 text-right tabular-nums ${strong ? "font-semibold" : "text-muted"}`}>{value}%</span>
+      <span className={`w-12 font-display text-right tabular-nums ${strong ? "font-semibold" : "text-muted"}`}>{value}%</span>
     </div>
   );
 }
