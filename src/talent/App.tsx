@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { profileEntries, selectionKey, toggleSelection, visibleResults } from "./results-state";
 import { Spinner } from "./components/ui";
 import { LangContext, loadLang, saveLang, translate } from "./i18n";
-import logoTalentIn from "@/assets/logo_talentin.png.asset.json";
+import logoTalentIn from "@/assets/talentin_wordmark.png.asset.json";
 
 export default function App({ isDemo = false }: { isDemo?: boolean }) {
   const [lang, setLang] = useState<Lang>("en");
