@@ -9,3 +9,4 @@
 - [x] Replace the selected TalentIn title with the uploaded logo and update the favicon.
 - [x] Run routing and state tests; inspect final build and browser errors.
 - [x] Document the external matching-service and profile-data handoff.
+- [ ] Use the newly uploaded wordmark as the page title and verify it renders.
