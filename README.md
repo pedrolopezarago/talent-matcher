@@ -4,12 +4,14 @@ NTT DATA case, CDTM × UPV-UV Hackathon, 21 Nov 2026.
 
 **The person you need is already in the company. We find them.** Describe a project, and the app extracts requirements per role, applies hard filters in code, matches people by meaning, explains every match with verified evidence and builds the best overall team.
 
+**Live:** https://talent-matcher-five.vercel.app · demo with seeded data: https://talent-matcher-five.vercel.app/demo
+
 The full spec is in [`.plans/ai-talent-matcher-spec.md`](.plans/ai-talent-matcher-spec.md). The API contract is in [`shared/contract.ts`](shared/contract.ts).
 
 ## Layout
 | Folder | Owner | What |
 |---|---|---|
-| `frontend/` | Builder B | Vite + React + TS, deployed to Vercel. Works against `src/mocks/` until the API is live |
+| `frontend/` | Builder B | Vite + React + TS, **currently deployed** to Vercel (root directory `frontend`). Works against `src/mocks/` until the API is live |
 | `backend/` | Builder A | FastAPI, the matching pipeline, Postgres + pgvector |
 | `shared/` | both | API contract and test briefs. Tell the other person before changing them |
 | `scripts/` | Builder A | Ingest, embedding job, pitch stats |
