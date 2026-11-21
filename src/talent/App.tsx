@@ -8,6 +8,8 @@ import { EvidenceDrawer } from "./components/EvidenceDrawer";
 import { RequirementsEditor } from "./components/RequirementsEditor";
 import { Results } from "./components/Results";
 import { TeamView } from "./components/TeamView";
+import { Button } from "@/components/ui/button";
+import { profileEntries, selectionKey, toggleSelection, visibleResults } from "./results-state";
 import { Spinner } from "./components/ui";
 import { LangContext, loadLang, saveLang, translate } from "./i18n";
 
@@ -29,7 +31,6 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
   const [selected, setSelected] = useState<string[]>([]);
   const [comparing, setComparing] = useState(false);
   const [drawer, setDrawer] = useState<{ c: Candidate; roleId: string } | null>(null);
-  const [compareRole, setCompareRole] = useState<string | null>(null);
 
   const [view, setView] = useState<"match" | "team" | "gaps">("match");
   const reqRef = useRef<HTMLDivElement>(null);
@@ -87,51 +88,55 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const allCands = result?.roles.flatMap((r) => r.candidates.map((c) => ({ c, roleId: r.role_id }))) ?? [];
-  const toggleSelect = (id: string) => {
-    const roleId = allCands.find((x) => x.c.employee_id === id)?.roleId ?? null;
-    // compare within one role: picking someone from another role starts a new selection
-    if (compareRole !== roleId) { setCompareRole(roleId); setSelected([id]); return; }
-    setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : s.length >= 4 ? s : [...s, id]));
+  const shownResult = brief && result ? visibleResults(brief, result, filters) : null;
+  const allCands = brief && shownResult ? profileEntries(brief, shownResult) : [];
+  const toggleSelect = (roleId: string, id: string) => {
+    setSelected((s) => toggleSelection(s, selectionKey(roleId, id)));
   };
   const reqsFor = (roleId: string | null) => brief?.roles.find((r) => r.id === roleId)?.requirements ?? [];
-  const selectedCands = selected
-    .map((id) => allCands.find((x) => x.c.employee_id === id && x.roleId === compareRole)?.c)
-    .filter((c): c is Candidate => !!c);
+  const selectedEntries = allCands.filter(({ c, roleId }) => selected.includes(selectionKey(roleId, c.employee_id)));
+  const visibleKeys = JSON.stringify(allCands.map(({ c, roleId }) => selectionKey(roleId, c.employee_id)));
+  useEffect(() => {
+    const keys: string[] = JSON.parse(visibleKeys);
+    setSelected((s) => {
+      const next = s.filter((key) => keys.includes(key));
+      return next.length === s.length ? s : next;
+    });
+  }, [visibleKeys]);
 
   return (
     <LangContext.Provider value={lang}>
       <header className="sticky top-0 z-20 border-b border-line bg-surface/75 backdrop-blur-xl">
         <div className="mx-auto flex h-12 max-w-6xl items-center gap-3 px-4 sm:px-6">
-          <div className="flex min-w-0 items-center gap-2 text-sm font-semibold tracking-tight">
-            <UsersRound size={16} className="text-brand" /><span className="hidden truncate sm:inline">Talent Matcher</span>
+          <div className="flex min-w-0 items-center gap-2 font-display text-sm font-semibold">
+            <UsersRound size={16} className="text-support-dark" /><span className="hidden truncate sm:inline">Talent Matcher</span>
           </div>
-          <nav className="mx-auto flex rounded-lg bg-black/[0.05] p-1">
+          <nav className="mx-auto flex rounded-lg bg-brand-soft p-1">
             {([["match", lang === "es" ? "Búsqueda" : "Search"], ["team", lang === "es" ? "Equipo" : "Team"], ["gaps", lang === "es" ? "Brechas" : "Gaps"]] as const).map(([k, label]) => (
-              <button key={k} onClick={() => goView(k)} disabled={k !== "match" && !result}
-                className={`rounded-md px-3 py-1 text-xs font-medium transition disabled:opacity-40 sm:px-4 ${view === k ? "bg-surface text-brand shadow-soft" : "text-muted hover:text-ink"}`}>
+              <Button variant="plain" key={k} onClick={() => goView(k)} disabled={k !== "match" && !result}
+                className={`rounded-md px-3 py-1 text-xs font-medium transition disabled:opacity-40 sm:px-4 ${view === k ? "bg-surface text-support-dark shadow-soft" : "text-muted hover:text-ink"}`}>
                 {label}
-              </button>
+              </Button>
             ))}
           </nav>
           <div className="flex items-center gap-1">
             {team && (
-              <button onClick={exportTeam} title={lang === "es" ? "Exportar equipo" : "Export team"} className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-ink hover:bg-black/[0.05]">
+              <Button variant="plain" onClick={exportTeam} title={lang === "es" ? "Exportar equipo" : "Export team"} className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-ink hover:bg-brand-soft">
                 <Download size={14} /><span className="hidden md:inline">{lang === "es" ? "Exportar" : "Export"}</span>
-              </button>
+              </Button>
             )}
             {brief && (
-              <button onClick={reset} title={t("newSearch")} className="grid size-7 place-items-center rounded-md text-muted hover:bg-black/[0.05] hover:text-ink"><RotateCcw size={14} /></button>
+              <Button variant="plain" onClick={reset} title={t("newSearch")} className="grid size-7 place-items-center rounded-md text-muted hover:bg-brand-soft hover:text-ink"><RotateCcw size={14} /></Button>
             )}
-            <button onClick={() => setLang(lang === "en" ? "es" : "en")} className="rounded-md px-2 py-1 text-xs font-semibold text-muted hover:bg-black/[0.05]">{lang === "en" ? "ES" : "EN"}</button>
+            <Button variant="plain" onClick={() => setLang(lang === "en" ? "es" : "en")} className="rounded-md px-2 py-1 text-xs font-semibold text-muted hover:bg-brand-soft">{lang === "en" ? "ES" : "EN"}</Button>
           </div>
         </div>
       </header>
 
       <main className="mx-auto max-w-5xl space-y-8 px-4 py-6 pb-28 sm:px-6 sm:py-8">
         <div className="pt-4">
-          <h1 className="text-4xl font-semibold tracking-tight text-ink">Internal Talent Matcher</h1>
-          <p className="mt-1 text-[15px] text-muted">{t("tagline")}{api.usingMocks && <span className="ml-2 text-xs font-medium text-brand">· {t("mockNote")}</span>}</p>
+          <h1 className="text-4xl font-semibold text-ink">Internal Talent Matcher</h1>
+          <p className="mt-1 text-[15px] text-muted">{t("tagline")}{api.usingMocks && <span className="ml-2 text-xs font-medium text-support-dark">· {t("mockNote")}</span>}</p>
         </div>
         <BriefInput text={text} setText={setText} onAnalyse={analyse} loading={loading === "parse"} filters={filters} setFilters={setFilters} showInput={!isDemo || !result} />
 
@@ -152,16 +157,16 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
             ) : (
               <>
                 <div className="flex justify-end">
-                  <button
+                  <Button variant="primary"
                     onClick={buildTeam} disabled={loading === "team"}
                     className="inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-medium text-on-brand transition hover:bg-brand-dark active:scale-[0.98]"
                   >
                     {loading === "team" ? <Spinner /> : <UsersRound size={16} />}
                     {loading === "team" ? t("building") : t("buildTeam")}
-                  </button>
+                  </Button>
                 </div>
                 <Results
-                  brief={brief} result={result} filters={filters} selected={selected} toggleSelect={toggleSelect}
+                  brief={brief} result={shownResult ?? result} selected={selected} toggleSelect={toggleSelect}
                   onOpen={(c, roleId) => setDrawer({ c, roleId })}
                 />
               </>
@@ -171,10 +176,10 @@ export default function App({ isDemo = false }: { isDemo?: boolean }) {
       </main>
 
       {!showTeam && (
-        <CompareBar n={selectedCands.length} onOpen={() => setComparing(true)} onClear={() => setSelected([])} />
+        <CompareBar n={selectedEntries.length} onOpen={() => setComparing(true)} onClear={() => setSelected([])} />
       )}
-      {comparing && selectedCands.length >= 2 && (
-        <CompareModal cands={selectedCands} reqs={reqsFor(compareRole)} onClose={() => setComparing(false)} />
+      {comparing && selectedEntries.length >= 2 && (
+        <CompareModal entries={selectedEntries} onClose={() => setComparing(false)} />
       )}
       {drawer && <EvidenceDrawer c={drawer.c} reqs={reqsFor(drawer.roleId)} onClose={() => setDrawer(null)} />}
     </LangContext.Provider>
@@ -188,17 +193,17 @@ function GapView({ brief, team, es }: { brief: Brief; team: TeamResult; es: bool
   const pct = reqs.length ? Math.round(((reqs.length - gaps.length) / reqs.length) * 100) : 100;
   return (
     <div className="grid gap-4 md:grid-cols-3">
-      <div className="rounded-3xl bg-brand p-6 text-on-brand">
+      <div className="border-y border-line p-6 text-ink">
         <div className="text-sm opacity-70">{es ? "Cobertura del equipo" : "Team coverage"}</div>
-        <div className="mt-2 text-5xl font-semibold tracking-tight">{pct}%</div>
-        <div className="mt-4 h-2 overflow-hidden rounded-full bg-on-brand/20"><div className="h-full rounded-full bg-orange" style={{ width: `${pct}%` }} /></div>
+        <div className="mt-2 font-display text-5xl font-semibold text-brand">{pct}%</div>
+        <div className="mt-4 h-2 overflow-hidden rounded-full bg-brand-soft"><div className="h-full rounded-full bg-orange" style={{ width: `${pct}%` }} /></div>
       </div>
       <div className="rounded-3xl bg-surface p-6 md:col-span-2">
-        <h3 className="font-semibold">{es ? "Requisitos sin cubrir" : "Uncovered requirements"} <span className="ml-1 rounded-full bg-orange px-2 py-0.5 text-xs text-on-brand">{gaps.length}</span></h3>
+        <h3 className="font-semibold">{es ? "Requisitos sin cubrir" : "Uncovered requirements"} <span className="ml-1 rounded-full bg-support-soft px-2 py-0.5 text-xs text-support-dark">{gaps.length}</span></h3>
         <div className="mt-4 flex flex-wrap gap-2">
           {gaps.length === 0 && <span className="text-sm text-muted">{es ? "El equipo cubre todos los requisitos." : "The team covers every requirement."}</span>}
           {gaps.map((q) => (
-            <span key={q.id} className={`rounded-full px-3 py-1.5 text-xs font-medium ${q.must ? "bg-orange text-on-brand" : "bg-brand-soft text-ink"}`}>{q.value}{q.must ? " · must" : ""}</span>
+            <span key={q.id} className={`rounded-full px-3 py-1.5 text-xs font-medium ${q.must ? "bg-support-soft text-support-dark" : "bg-brand-soft text-ink"}`}>{q.value}{q.must ? " · must" : ""}</span>
           ))}
         </div>
       </div>

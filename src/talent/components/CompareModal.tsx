@@ -1,6 +1,9 @@
-import { X } from "lucide-react";
-import type { Candidate, Requirement } from "@/shared/contract";
+import { Content } from "@radix-ui/react-dialog";
+import { Scale, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogClose, DialogOverlay, DialogPortal, DialogTitle } from "@/components/ui/dialog";
 import { useT } from "../i18n";
+import { selectionKey, type ProfileEntry } from "../results-state";
 import { FitRing, StatusIcon } from "./ui";
 
 export function CompareBar({ n, onOpen, onClear }: { n: number; onOpen: () => void; onClear: () => void }) {
@@ -8,81 +11,105 @@ export function CompareBar({ n, onOpen, onClear }: { n: number; onOpen: () => vo
   if (n < 1) return null;
   return (
     <div className="fixed inset-x-0 bottom-4 z-30 flex justify-center px-4">
-      <div className="flex items-center gap-3 rounded-2xl bg-brand px-4 py-2.5 text-sm text-on-brand shadow-soft">
-        <span>{n} / 4</span>
-        <button onClick={onClear} className="text-on-brand/60 hover:text-on-brand">{t("clear")}</button>
-        <button
-          onClick={onOpen} disabled={n < 2}
-          className="rounded-2xl bg-brand px-3 py-1.5 font-semibold transition hover:bg-brand-dark disabled:opacity-40"
-        >
-          {t("compareN", { n })}
-        </button>
+      <div className="flex max-w-full flex-wrap items-center justify-center gap-3 rounded-lg border border-support/20 bg-surface px-4 py-3 text-sm shadow-soft">
+        <span className="font-display text-lg font-semibold tabular-nums text-support-dark">{n}</span>
+        <Button variant="plain" size="sm" onClick={onClear}>{t("clear")}</Button>
+        <Button variant="support" className="h-auto min-h-9 py-2" onClick={onOpen} disabled={n < 2}>
+          <Scale size={16} />{t("compareN", { n })}
+        </Button>
       </div>
     </div>
   );
 }
 
-export function CompareModal({ cands, reqs, onClose }: { cands: Candidate[]; reqs: Requirement[]; onClose: () => void }) {
+export function CompareModal({ entries, onClose }: { entries: ProfileEntry[]; onClose: () => void }) {
   const t = useT();
-  const cell = "border-b border-line px-3 py-2.5 align-top";
+  const roles = Array.from(new Map(entries.map((entry) => [entry.roleId, entry])).values());
+  const rows = roles.flatMap((entry) => entry.reqs.map((req) => ({ req, roleId: entry.roleId, roleTitle: entry.roleTitle })));
+  const cell = "min-w-[180px] border-b border-line px-3 py-4 align-top text-left";
   return (
-    <div className="fixed inset-0 z-40 grid place-items-center p-4">
-      <div className="absolute inset-0 bg-brand/30 backdrop-blur-[2px]" onClick={onClose} />
-      <div className="relative max-h-[90vh] w-full max-w-5xl overflow-auto rounded-2xl bg-surface shadow-soft">
-        <div className="sticky top-0 z-10 flex items-center border-b border-line bg-surface px-5 py-3">
-          <h3 className="font-semibold">{t("compare")}</h3>
-          <button onClick={onClose} aria-label={t("close")} className="ml-auto rounded-lg p-1.5 text-muted hover:bg-canvas"><X size={18} /></button>
-        </div>
-        <table className="w-full min-w-[560px] text-sm">
-          <thead>
-            <tr>
-              <th className={`${cell} w-44 text-left text-xs font-medium text-muted`}>{t("requirement")}</th>
-              {cands.map((c) => (
-                <th key={c.employee_id} className={`${cell} text-left`}>
-                  <div className="flex items-center gap-3">
-                    <FitRing fit={c.fit} size={44} />
-                    <div>
-                      <div className="font-semibold">{c.name}</div>
-                      <div className="text-xs font-normal text-muted">{c.seniority} · {c.availability}</div>
-                    </div>
+    <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+      <DialogPortal>
+        <DialogOverlay className="bg-overlay backdrop-blur-[2px]" />
+        <Content aria-describedby={undefined} className="fixed left-1/2 top-1/2 z-50 flex max-h-[calc(100dvh-32px)] w-[calc(100%-32px)] max-w-6xl -translate-x-1/2 -translate-y-1/2 flex-col gap-6 rounded-lg border border-line bg-surface p-6 shadow-soft sm:max-h-[calc(100dvh-64px)] sm:w-[calc(100%-64px)] sm:p-8">
+          <div className="flex shrink-0 items-center justify-between gap-6">
+            <DialogTitle className="font-display text-2xl">{t("compare")}</DialogTitle>
+            <DialogClose asChild><Button variant="plain" size="icon" aria-label={t("close")}><X size={18} /></Button></DialogClose>
+          </div>
+          <div className="min-h-0 overflow-auto overscroll-contain">
+            <div className="space-y-6 sm:hidden">
+              {entries.map(({ c, roleId, roleTitle, reqs }) => (
+                <section key={selectionKey(roleId, c.employee_id)} className="border-b border-line pb-6">
+                  <div className="mb-3 text-xs text-support-dark">{roleTitle}</div>
+                  <div className="flex items-start gap-3">
+                    <FitRing fit={c.fit} size={48} />
+                    <div className="min-w-0"><h3 className="text-lg font-semibold">{c.name}</h3><p className="mt-1 text-xs text-muted">{c.seniority} · {c.availability}</p></div>
                   </div>
-                </th>
+                  <dl className="mt-5 space-y-4 text-sm leading-relaxed">
+                    {reqs.map((req) => {
+                      const cv = c.coverage.find((x) => x.req_id === req.id);
+                      return <div key={req.id}>
+                        <dt className="font-display font-semibold">{req.value} <span className="font-sans text-xs font-normal text-muted">· {req.must ? t("must") : t("nice")}</span></dt>
+                        <dd className="mt-1 flex items-start gap-2 text-xs text-muted"><span className="mt-1 shrink-0"><StatusIcon status={cv?.status ?? "missing"} /></span>{cv?.evidence.map((e) => e.value).join(" · ") || t("noEvidence")}</dd>
+                      </div>;
+                    })}
+                    {(["strengths", "gaps", "risks"] as const).map((k) => <div key={k}><dt className="font-display font-semibold">{t(k)}</dt><dd className="mt-1 text-xs text-muted">{c[k].join(" · ") || "—"}</dd></div>)}
+                  </dl>
+                </section>
               ))}
-            </tr>
-          </thead>
-          <tbody>
-            {reqs.map((r) => (
-              <tr key={r.id}>
-                <td className={cell}>
-                  <span className={r.must ? "font-medium" : "text-muted"}>{r.value}</span>
-                  <span className="ml-1 text-[11px] text-muted">{r.must ? t("must") : t("nice")}</span>
-                </td>
-                {cands.map((c) => {
-                  const cv = c.coverage.find((x) => x.req_id === r.id);
-                  return (
-                    <td key={c.employee_id} className={cell}>
-                      <div className="flex items-start gap-1.5">
-                        <StatusIcon status={cv?.status ?? "missing"} />
-                        <span className="text-[13px] text-ink/80">{cv?.evidence[0]?.value ?? "—"}</span>
+            </div>
+            <table className="hidden w-full border-separate border-spacing-x-6 border-spacing-y-0 text-sm leading-relaxed sm:table">
+              <thead>
+                <tr>
+                  <th className={`${cell} min-w-[160px] text-xs font-normal text-muted`}>{t("requirement")}</th>
+                  {entries.map(({ c, roleId, roleTitle }) => (
+                    <th key={selectionKey(roleId, c.employee_id)} className={cell}>
+                      <div className="mb-3 text-xs font-normal text-support-dark">{roleTitle}</div>
+                      <div className="flex items-start gap-3">
+                        <FitRing fit={c.fit} size={48} />
+                        <div className="min-w-0">
+                          <div className="font-display text-lg font-semibold">{c.name}</div>
+                          <div className="mt-1 text-xs font-normal text-muted">{c.seniority} · {c.availability}</div>
+                        </div>
                       </div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map(({ req, roleId, roleTitle }) => (
+                  <tr key={selectionKey(roleId, req.id)}>
+                    <td className={cell}>
+                      {roles.length > 1 && <div className="mb-1 font-display text-sm text-support-dark">{roleTitle}</div>}
+                      <span className={req.must ? "font-bold" : "text-muted"}>{req.value}</span>
+                      <div className="mt-1 text-xs text-muted">{req.must ? t("must") : t("nice")}</div>
                     </td>
-                  );
-                })}
-              </tr>
-            ))}
-            {(["strengths", "gaps", "risks"] as const).map((k) => (
-              <tr key={k}>
-                <td className={`${cell} text-xs font-semibold ${k === "strengths" ? "text-ok" : k === "gaps" ? "text-bad" : "text-warn"}`}>{t(k)}</td>
-                {cands.map((c) => (
-                  <td key={c.employee_id} className={`${cell} text-[13px]`}>
-                    {c[k].length ? c[k].join(" · ") : "—"}
-                  </td>
+                    {entries.map(({ c, roleId: candidateRole }) => {
+                      const cv = candidateRole === roleId ? c.coverage.find((x) => x.req_id === req.id) : undefined;
+                      return (
+                        <td key={selectionKey(candidateRole, c.employee_id)} className={cell}>
+                          {candidateRole !== roleId ? <span className="text-muted">—</span> : (
+                            <div className="flex items-start gap-2">
+                              <span className="mt-1 shrink-0"><StatusIcon status={cv?.status ?? "missing"} /></span>
+                              <span className="text-[13px] text-ink/80">{cv?.evidence.map((e) => e.value).join(" · ") || t("noEvidence")}</span>
+                            </div>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
                 ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+                {(["strengths", "gaps", "risks"] as const).map((k) => (
+                  <tr key={k}>
+                    <td className={`${cell} font-display font-semibold ${k === "strengths" ? "text-ok" : k === "gaps" ? "text-bad" : "text-warn"}`}>{t(k)}</td>
+                    {entries.map(({ c, roleId }) => <td key={selectionKey(roleId, c.employee_id)} className={`${cell} text-[13px]`}>{c[k].join(" · ") || "—"}</td>)}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Content>
+      </DialogPortal>
+    </Dialog>
   );
 }

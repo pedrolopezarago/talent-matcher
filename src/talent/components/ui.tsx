@@ -3,9 +3,7 @@ import type { ReactNode } from "react";
 import type { Coverage } from "@/shared/contract";
 
 export function fitColor(fit: number) {
-  if (fit >= 85) return "var(--color-ok)";
-  if (fit >= 70) return "var(--color-peach)";
-  return "var(--color-muted)";
+  return fit >= 0 ? "var(--color-brand)" : "var(--color-muted)";
 }
 
 export function FitRing({ fit, size = 56 }: { fit: number; size?: number }) {
@@ -21,16 +19,16 @@ export function FitRing({ fit, size = 56 }: { fit: number; size?: number }) {
           style={{ transition: "stroke-dashoffset 600ms cubic-bezier(.2,.8,.2,1)" }}
         />
       </svg>
-      <span className="absolute inset-0 grid place-items-center text-sm font-semibold tabular-nums">{fit}%</span>
+      <span className="absolute inset-0 grid place-items-center font-display text-sm font-semibold tabular-nums">{fit}%</span>
     </div>
   );
 }
 
 const tones = {
   neutral: "bg-muted/10 text-ink border-line",
-  brand: "bg-brand-soft text-brand-dark border-transparent",
+  brand: "bg-support-soft text-support-dark border-transparent",
   ok: "bg-sage text-ok border-sage-line",
-  warn: "bg-peach text-ink border-transparent",
+  warn: "bg-brand-soft text-ink border-transparent",
   bad: "bg-bad-soft text-bad border-transparent",
   hidden: "bg-cream text-ink border-transparent",
   cream: "bg-cream text-ink border-transparent",

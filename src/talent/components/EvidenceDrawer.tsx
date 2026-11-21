@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Quote, X } from "lucide-react";
 import { useEffect } from "react";
 import type { Candidate, Requirement } from "@/shared/contract";
@@ -16,7 +17,7 @@ export function EvidenceDrawer({ c, reqs, onClose }: { c: Candidate; reqs: Requi
 
   return (
     <div className="fixed inset-0 z-40 flex justify-end">
-      <div className="absolute inset-0 bg-brand/30 backdrop-blur-[2px]" onClick={onClose} />
+      <div className="absolute inset-0 bg-overlay backdrop-blur-[2px]" onClick={onClose} />
       <aside className="relative h-full w-full max-w-lg overflow-y-auto bg-surface shadow-soft animate-[slide_220ms_cubic-bezier(.2,.8,.2,1)]">
         <div className="sticky top-0 z-10 flex items-center gap-4 border-b border-line bg-surface/95 px-6 py-4 backdrop-blur">
           <FitRing fit={c.fit} size={48} />
@@ -24,7 +25,7 @@ export function EvidenceDrawer({ c, reqs, onClose }: { c: Candidate; reqs: Requi
             <h3 className="truncate font-semibold">{c.name}</h3>
             <p className="truncate text-sm text-muted">{c.current_role} · {c.area}</p>
           </div>
-          <button onClick={onClose} aria-label={t("close")} className="rounded-lg p-1.5 text-muted hover:bg-canvas"><X size={18} /></button>
+          <Button variant="plain" onClick={onClose} aria-label={t("close")} className="rounded-lg p-1.5 text-muted hover:bg-canvas"><X size={18} /></Button>
         </div>
 
         <div className="space-y-6 px-6 py-5">
@@ -53,7 +54,7 @@ export function EvidenceDrawer({ c, reqs, onClose }: { c: Candidate; reqs: Requi
                       <ul className="mt-2 space-y-1">
                         {cv.evidence.map((e) => (
                           <li key={e.path} className="flex items-start gap-2 rounded-lg bg-brand-soft/60 px-2.5 py-1.5 text-[13px]">
-                            <Quote size={12} className="mt-0.5 shrink-0 text-brand" />
+                            <Quote size={12} className="mt-0.5 shrink-0 text-support-dark" />
                             <span className="flex-1">{e.value}</span>
                             <code className="shrink-0 text-[11px] text-muted">{e.path}</code>
                           </li>

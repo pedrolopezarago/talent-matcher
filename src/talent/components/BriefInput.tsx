@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import type { Availability } from "@/shared/contract";
 import { useT } from "../i18n";
@@ -27,7 +28,7 @@ export function BriefInput({ text, setText, onAnalyse, loading, filters, setFilt
   filters: HardFilters; setFilters: (f: HardFilters) => void; showInput?: boolean;
 }) {
   const t = useT();
-  const pill = (on: boolean) => `rounded-md px-2.5 py-1 text-xs font-medium transition ${on ? "bg-ink text-surface" : "bg-black/[0.04] text-ink hover:bg-black/[0.07]"}`;
+  const pill = (on: boolean) => `rounded-md px-2.5 py-1 text-xs font-medium transition ${on ? "bg-support-soft text-support-dark" : "bg-brand-soft text-ink hover:bg-support-soft"}`;
   return (
     <div className="space-y-4">
       {showInput && (
@@ -36,14 +37,14 @@ export function BriefInput({ text, setText, onAnalyse, loading, filters, setFilt
           onChange={(e) => setText(e.target.value)}
           placeholder={t("briefPlaceholder")}
           rows={5}
-          className="w-full resize-y rounded-2xl border border-black/[0.08] bg-black/[0.03] p-4 text-[15px] leading-relaxed outline-none transition placeholder:text-muted focus:bg-surface focus:ring-4 focus:ring-brand/15"
+          className="w-full resize-y rounded-2xl border border-line bg-brand-soft p-4 text-[15px] leading-relaxed outline-none transition placeholder:text-muted focus:bg-surface focus:ring-4 focus:ring-support/15"
         />
       )}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         {showInput && (
           <div className="flex flex-wrap items-center gap-1.5">
             {EXAMPLES.map((ex) => (
-              <button key={ex.label} onClick={() => setText(ex.text)} className={pill(text === ex.text)}>{ex.label}</button>
+              <Button variant="plain" key={ex.label} onClick={() => setText(ex.text)} className={pill(text === ex.text)}>{ex.label}</Button>
             ))}
           </div>
         )}
@@ -52,26 +53,26 @@ export function BriefInput({ text, setText, onAnalyse, loading, filters, setFilt
           {ALL_AVAILABILITY.map((a) => {
             const on = filters.availability.includes(a);
             return (
-              <button key={a} aria-pressed={on} className={pill(on)}
+              <Button variant="plain" key={a} aria-pressed={on} className={pill(on)}
                 onClick={() => setFilters({ ...filters, availability: on ? filters.availability.filter((x) => x !== a) : [...filters.availability, a] })}>
                 {a.replace("Roll-off próximo (<3 meses)", "Roll-off <3m")}
-              </button>
+              </Button>
             );
           })}
           <select value={filters.minYears} onChange={(e) => setFilters({ ...filters, minYears: Number(e.target.value) })}
-            aria-label={t("minYearsLabel")} className="rounded-md bg-black/[0.04] px-2 py-1 text-xs font-medium outline-none">
+            aria-label={t("minYearsLabel")} className={`rounded-md ${filters.minYears ? "bg-support-soft text-support-dark" : "bg-brand-soft"} px-2 py-1 text-xs font-medium outline-none`}>
             {[0, 1, 2, 3, 5, 8, 10].map((n) => <option key={n} value={n}>{n === 0 ? t("anyYears") : `${n}+ ${t("years")}`}</option>)}
           </select>
         </div>
         {showInput && (
-          <button
+          <Button variant="plain"
             onClick={onAnalyse}
             disabled={!text.trim() || loading}
-            className="ml-auto inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-medium text-on-brand transition hover:bg-brand-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+            className="ml-auto inline-flex items-center gap-2 rounded-lg bg-support px-4 py-2 text-sm font-medium text-on-brand transition hover:bg-support-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
           >
             {loading ? <Spinner /> : <Search size={15} />}
             {loading ? t("analysing") : t("findTalent")}
-          </button>
+          </Button>
         )}
       </div>
     </div>
