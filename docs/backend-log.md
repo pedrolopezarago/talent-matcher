@@ -22,3 +22,8 @@ Running log of what the backend team did and why. Newest at the bottom.
 - Effort per task: screening `low` (cheap pass), extract/judge `medium`. System prompt cached (`cache_control`), so the requirements block repeated across screening batches is billed at cache rates.
 - Prices (USD/MTok in/out): Haiku 5.5 0.10/0.50, Sonnet 5.5 2/10. Screening 1,000 cards × ~150 tokens ≈ 150k tokens ≈ $0.015 per role on Haiku.
 - Every call retries once, then raises `LLMError`; callers drop the batch and count it.
+
+### Task 4 — `/api/brief/parse`
+- One structured-output call with the data vocabulary (87 roles, 12 areas, sectors, 614 skills) in the cached system prompt; the LLM maps requirements onto real data words and adds vocabulary synonyms (how keyword mode bridges different wording).
+- Code clamps: review_depth 100–SCREEN_MAX_PER_ROLE, criticality 1–5, weight 1–3; ids `r{n}` / `r{n}-q{m}`; no date → `immediate=true`.
+- Errors: empty text or no roles → 422; LLM failure → 502.

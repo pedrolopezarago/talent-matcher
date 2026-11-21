@@ -2,6 +2,10 @@ import os
 
 os.environ["LLM_PROVIDER"] = "fake"
 os.environ["EMBED_PROVIDER"] = "none"
+# Pin knobs so the local .env (loaded with override=False) cannot change test results.
+os.environ["SCREEN_MAX_PER_ROLE"] = "1000"
+os.environ["JUDGE_TOP_N"] = "40"
+os.environ["MAX_USD_PER_REQUEST"] = "0.75"
 
 import pytest
 
